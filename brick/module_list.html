@@ -1,0 +1,50 @@
+<!--[*]
+[script]brick_module_list.php[/script]
+[mcss=mods]mods.css[/mcss]
+
+[p=forcontent]false[/p]
+[p=limit]500[/p]
+
+[p=imgw]96[/p]
+[p=imgh]96[/p]
+
+[p=cfg][/p]
+
+[bkvar=table]
+	<ul class="modlist">
+		{v#rows}
+	</ul>
+[/bkvar]
+
+[bkvar=row]
+	<li class="moditem">
+		<h3><a title="{v#title}" href="{v#link}">{v#title}</a></h3>
+		<div class="micon">
+			<div class="tmb tmb96">
+				{v#image}
+			</div>
+		</div>
+		<div class="info">
+			{v#mindesc}
+		</div>
+		<div class="clear"></div>
+		<div class="more">
+			<a href="{v#link}">узнать больше...</a>
+		</div>
+		
+    </li>
+[/bkvar]
+
+[bkvar=img]
+	<a class="tmbpre" title="{v#title}" href="{v#link}">
+		<img alt="{v#title}" src="{v#src}" />
+	</a>
+[/bkvar]
+
+[bkvar=imgempty]
+	<a class="tmbpre" title="{v#title}" href="{v#link}">
+		<img alt="{v#title}" src="/modules/mods/images/emptyimg.gif" />
+	</a>
+[/bkvar]
+
+[*]-->{v#result}

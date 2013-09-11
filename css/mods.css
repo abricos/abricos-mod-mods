@@ -1,0 +1,40 @@
+.mod-mods .clear {
+	font-size: 1px;
+	height: 0;
+	line-height: 0;
+}
+.mod-mods .rel { position: relative; }
+.mod-mods .red { color: red; }
+
+/* * * * Image Preview * * * * */
+.mod-mods .tmb96 { width: 96px; height: 96px; }
+
+.mod-mods .tmb96 img { max-width: 96px; max-height: 96px; }
+
+.mod-mods .tmb { display: table; }
+.mod-mods .tmb .tmbpre {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+.mod-mods .tmb .tmbpre img {
+	margin: 0 auto !important;
+}
+
+.mod-mods .moditem .micon {
+	float: left;
+	margin: 0 10px 0 0;
+}
+.mod-mods .moditem .micon .tmb {
+	border: 1px solid #DEE2E3;
+}
+
+/* * * * Список модулей * * * */
+.mod-mods .modlist .moditem {
+	border-bottom: 1px solid #DEE2E3;
+	margin: 0 0 5px 0;
+	padding-bottom: 5px;
+}
+.mod-mods .modlist .more {
+	text-align: right;
+}

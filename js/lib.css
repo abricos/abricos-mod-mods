@@ -1,0 +1,15 @@
+.aw-mods .clear { clear: both;}
+.aw-mods .loading,
+.aw-mods .nullitem { 
+	text-align: center;
+	padding: 70px 0; 
+}
+
+.aw-mods .yui-navset .yui-content {
+    background-color: #FFF !important;
+    border: none !important;
+}
+.aw-mods .yui-navset .yui-nav, 
+.aw-mods .yui-navset .yui-navset-top .yui-nav {
+	border-width: 0 0 1px !important;
+} 
