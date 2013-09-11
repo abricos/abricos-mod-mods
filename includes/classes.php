@@ -59,6 +59,9 @@ class ModsCatalogManager extends CatalogModuleManager {
 		
 		// разрешить изменять имя элемента
 		$this->cfgElementNameChange = true;
+		$this->cfgElementUniqueOptions = 'name';
+		$this->cfgElementCreateBaseTypeDisable = true;
+		
 	}
 	
 	public function IsAdminRole(){
@@ -79,6 +82,8 @@ class ModsCatalogManager extends CatalogModuleManager {
 	 */
 	public function Module($name){
 		$el = $this->ElementByName($name);
+		
+		if (empty($el)){ return null; }
 		
 		$ext = $el->detail->optionsBase;
 		

@@ -50,43 +50,17 @@ class ModsModule extends Ab_Module {
 		$adress = Abricos::$adress;
 		
 		if ($adress->level >= 2){
-			switch ($adress->dir[1]){
-				case 'search':
-					return $adress->dir[1];
-			}
+			$modName = $adress->dir[1];
+			$cMan = $this->GetManager()->cManager;
+			
+			// TODO: необходимо организовать кеширование
+			$el = $cMan->Module($modName);
+			if (empty($el)){ return ''; }
+			
+			return 'module';
 		}
 		
 		return 'modules';
-		
-		/*
-		$lastitem = $adress->dir[count($adress->dir)-1];
-		
-		if (preg_match("/^product_[0-9]+/", $lastitem)){
-			
-			$arr = explode("_", $lastitem);
-			
-			// $db = $this->registry->db;
-			$catManager = $this->GetCatalogManager();
-			
-			$this->currentProductId = intval($arr[1]);
-			
-			return "product";
-		}
-		
-		// перегрузить кирпич-контент если таков есть исходя из адреса в урле
-		// т.е. если идет запрос http://domain.ltd/Mods/mycat/ и в шаблоне есть файл
-		// /tt/имя_шаблона/override/Mods/content/products-Mods-mycat.html, то он будет 
-		// принят парсером для обработки
-		// соответственно, если необходимо перегрузить только корень каталога продукции, то
-		// необходимо создать файл products-Mods.html
-		$newarr = $adress->dir;
-		if (!empty($newarr) && count($newarr) > 0){
-			$fname = "products-".implode("-", $newarr);
-		}else{
-			$fname = "products-Mods";
-		}
-		return array($fname, "products");
-		/**/
 	}
 	
 	/**

@@ -35,5 +35,15 @@ if ($updateManager->isInstall()){
 	ModsOptionAppend('mindesc', 'Краткое описание модуля', Catalog::TP_TEXT);
 	ModsOptionAppend('desc', 'Подробное описание модуля', Catalog::TP_TEXT);
 	ModsOptionAppend('version', 'Версия', Catalog::TP_STRING, 50);
+	
+	$cManager = ModsManager::$instance->cManager;
+	$cManager->ElementTypeSave(0, array(
+		"nm" => "module",
+		"tl" => "Модуль"
+	));
+	$cManager->ElementTypeSave(0, array(
+		"nm" => "template",
+		"tl" => "Шаблон"
+	));
 }
 ?>

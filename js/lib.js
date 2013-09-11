@@ -67,7 +67,8 @@ Component.entryPoint = function(NS){
 		NSCat.initManager('{C#MODNAME}', callback, {
 			'ElementClass': NS.Element,
 			'language': LNG,
-			'elementNameChange': true
+			'elementNameChange': true,
+			'elementCreateBaseTypeDisable': true
 		});
 	};
 	
