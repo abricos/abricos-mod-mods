@@ -35,6 +35,7 @@ if ($updateManager->isInstall()){
 	ModsOptionAppend('mindesc', 'Краткое описание модуля', Catalog::TP_TEXT);
 	ModsOptionAppend('desc', 'Подробное описание модуля', Catalog::TP_TEXT);
 	ModsOptionAppend('version', 'Версия', Catalog::TP_STRING, 50);
+	ModsOptionAppend('depends', 'Зависит от модулей', Catalog::TP_ELDEPENDSNAME);
 	
 	$cManager = ModsManager::$instance->cManager;
 	$cManager->ElementTypeSave(0, array(

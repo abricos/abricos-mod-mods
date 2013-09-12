@@ -68,6 +68,7 @@ Component.entryPoint = function(NS){
 			'ElementClass': NS.Element,
 			'language': LNG,
 			'elementNameChange': true,
+			'elementNameUnique': true,
 			'elementCreateBaseTypeDisable': true
 		});
 	};

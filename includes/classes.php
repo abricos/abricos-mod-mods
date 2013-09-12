@@ -59,7 +59,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 		
 		// разрешить изменять имя элемента
 		$this->cfgElementNameChange = true;
-		$this->cfgElementUniqueOptions = 'name';
+		$this->cfgElementNameUnique = true;
 		$this->cfgElementCreateBaseTypeDisable = true;
 		
 	}
