@@ -18,26 +18,33 @@ ModsManager::$instance->RoleDisable();
 
 $cManager = ModsManager::$instance->cManager;
 
-function ModsOptionAppend($name, $title, $type, $size = ''){
-	$cManager = ModsManager::$instance->cManager;
-	
-	$d = new stdClass();
-	$d->nm = $name;
-	$d->tl = $title;
-	$d->tp = $type;
-	$d->sz = $size;
-	return $cManager->ElementOptionSave(0, $d);
-}
-
 if ($updateManager->isInstall()){
 	Abricos::GetModule('mods')->permission->Install();
 	
-	ModsOptionAppend('mindesc', 'Краткое описание модуля', Catalog::TP_TEXT);
-	ModsOptionAppend('desc', 'Подробное описание модуля', Catalog::TP_TEXT);
-	ModsOptionAppend('version', 'Версия', Catalog::TP_STRING, 50);
-	ModsOptionAppend('depends', 'Зависит от модулей', Catalog::TP_ELDEPENDSNAME);
+	$ord = 100;
+	$cManager->ElementOptionSave(0, array(
+		"nm" => "mindesc", "tl" => "Краткое описание модуля",
+		"tp" => Catalog::TP_TEXT, "ord" => $ord--
+	));
+	$cManager->ElementOptionSave(0, array(
+		"nm" => "desc", "tl" => "Подробное описание модуля",
+		"tp" => Catalog::TP_TEXT, "ord" => $ord--
+	));
+	$cManager->ElementOptionSave(0, array(
+		"nm" => "version", "tl" => "Версия",
+		"tp" => Catalog::TP_STRING, "ord" => $ord--,
+		"sz" => 50
+	));
+	$cManager->ElementOptionSave(0, array(
+		"nm" => "depends", "tl" => "Зависит от модулей",
+		"tp" => Catalog::TP_ELDEPENDSNAME, "ord" => $ord--
+	));
+	$cManager->ElementOptionSave(0, array(
+		"nm" => "distribution", "tl" => "Дистрибутив",
+		"tp" => Catalog::TP_FILES, "ord" => $ord--,
+		"prm" => "count=1;ftypes=zip:5242880"
+	));
 	
-	$cManager = ModsManager::$instance->cManager;
 	$cManager->ElementTypeSave(0, array(
 		"nm" => "module",
 		"tl" => "Модуль"
