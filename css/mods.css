@@ -28,12 +28,53 @@
 .mod-mods .moditem .micon .tmb {
 	border: 1px solid #DEE2E3;
 }
+.mod-mods .moditem .feature,
+.mod-mods .moditem .feature a {
+	color: #777777;
+}
+.mod-mods .moditem .feature dl,
+.mod-mods .moditem .feature dt,
+.mod-mods .moditem .feature dd {
+	float: left;
+}
+.mod-mods .moditem .feature dl,
+.mod-mods .moditem .feature dt {
+	margin-right: 5px;
+}
+
+.mod-mods .moditem .feature a {
+	
+}
+.mod-mods .moditem .feature .download {
+	margin: 10px 0;
+}
+
+.mod-mods .moditem .feature .download a {
+	text-decoration: none;
+	display: block;
+	background: linear-gradient(#669be1, #5784bf) repeat scroll 0 0 #489615;
+	/* background-image: -webkit-linear-gradient(#669be1, #5784bf); /**/
+	border-radius: 5px;
+	padding: 3px 10px 4px;
+	/* box-shadow: 0 1px rgba(0, 0, 0, 0.1), 0 -2px rgba(0, 0, 0, 0.1) inset; /**/
+	color: #fff;
+}
+.mod-mods .moditem .feature .download a:HOVER {
+	background-color: #5784bf;
+}
+.mod-mods .moditem .feature .sep {
+	float: left;
+	margin-right: 5px;
+}
+.mod-mods .moditem .info .opt-desc {
+	padding-top: 10px;
+}
 
 /* * * * Список модулей * * * */
 .mod-mods .modlist .moditem {
 	border-bottom: 1px solid #DEE2E3;
 	margin: 0 0 5px 0;
-	padding-bottom: 5px;
+	padding-bottom: 15px;
 }
 .mod-mods .modlist .more {
 	text-align: right;

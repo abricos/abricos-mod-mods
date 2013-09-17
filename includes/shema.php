@@ -36,11 +36,16 @@ if ($updateManager->isInstall()){
 		"sz" => 50
 	));
 	$cManager->ElementOptionSave(0, array(
+		"nm" => "compat", "tl" => "Совместимость",
+		"tp" => Catalog::TP_STRING, "ord" => $ord--,
+		"sz" => 50
+	));
+	$cManager->ElementOptionSave(0, array(
 		"nm" => "depends", "tl" => "Зависит от модулей",
 		"tp" => Catalog::TP_ELDEPENDSNAME, "ord" => $ord--
 	));
 	$cManager->ElementOptionSave(0, array(
-		"nm" => "distribution", "tl" => "Дистрибутив",
+		"nm" => "distrib", "tl" => "Дистрибутив",
 		"tp" => Catalog::TP_FILES, "ord" => $ord--,
 		"prm" => "count=1;ftypes=zip:5242880"
 	));

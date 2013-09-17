@@ -88,6 +88,8 @@ class ModsCatalogManager extends CatalogModuleManager {
 		$ext = $el->detail->optionsBase;
 		
 		$el->ext['version'] = $ext['version'];
+		$el->ext['distrib'] = $ext['distrib'];
+		$el->ext['compat'] = $ext['compat'];
 		$el->ext['mindesc'] = $ext['mindesc'];
 		
 		return $el;
@@ -110,7 +112,9 @@ class ModsCatalogManager extends CatalogModuleManager {
 		
 		$cfg->extFields->Add($optionsBase->GetByName("mindesc"));
 		$cfg->extFields->Add($optionsBase->GetByName("version"));
-
+		$cfg->extFields->Add($optionsBase->GetByName("compat"));
+		$cfg->extFields->Add($optionsBase->GetByName("distrib"));
+		
 		return $this->ElementList($cfg);
 	}
 
