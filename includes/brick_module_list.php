@@ -10,7 +10,7 @@ $brick = Brick::$builder->brick;
 $p = &$brick->param->param;
 $v = &$brick->param->var;
 
-$man = ModsModule::$instance->GetManager()->cManager;
+$cMan = ModsModule::$instance->GetManager()->cManager;
 
 $imgWidth = bkint($p['imgw']);
 $imgHeight = bkint($p['imgh']);
@@ -39,13 +39,13 @@ if (preg_match("/^page[0-9]+/", $page)){
 	}
 }
 	
-$elList = $man->ModuleList($cfg);
+$elList = $cMan->ModuleList($cfg);
 
 $brick->elementList = $elList;
 if (empty($elList)){ $brick->content = ""; return; }
 
-$uList = $man->UserList($elList);
-$files = $man->ElementOptionFileList($elList);
+$uList = $cMan->UserList($elList);
+$files = $cMan->ElementOptionFileList($elList);
 
 $lst = "";
 for ($i=0;$i<$elList->Count();$i++){

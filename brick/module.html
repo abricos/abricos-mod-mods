@@ -27,15 +27,93 @@
 <div class="modview">
 	<div class="moditem">
 		<h3><a title="{v#title}" href="{v#link}">{v#title}</a></h3>
-		<div class="micon">
-			<div class="tmb tmb96">
-				{v#image}
+		<table class="mimain"><tbody><tr>
+		
+		<td>
+			<div class="micon">
+				<div class="tmb tmb96">
+					{v#image}
+				</div>
+			</div>
+		</td>
+		
+		<td>
+			<div class="info">
+				<div class="feature">
+
+					<dl class="opt-version">
+						<dt>Автор</dt>
+						<dd>
+							<a href="{v#ulink}">{v#uname}</a>
+						</dd>
+					</dl>
+					<div class="clear"></div>
+
+					<dl class="download">
+						<dt></dt>
+						<dd>
+							<a href="{v#downlink}">Скачать</a>
+						</dd>
+					</dl>
+					<div class="clear"></div>
+				
+					<dl class="opt-version">
+						<dt>Версия</dt>
+						<dd>{v#version}</dd>
+					</dl>
+					<div class="sep">|</div>
+					<dl class="opt-compat">
+						<dt>Совместимость</dt>
+						<dd>{v#compat}</dd>
+					</dl>
+					<div class="clear"></div>
+					<dl class="opt-version">
+						<dt>Добавлен</dt>
+						<dd>{v#dateline}</dd>
+					</dl>
+					<div style="display: none">
+						<div class="sep">|</div>
+						<dl class="opt-compat">
+							<dt>Обновлен</dt>
+							<dd>{v#upddate}</dd>
+						</dl>
+					</div>
+					<div class="clear"></div>
+					<dl class="opt-distrib-cnt">
+						<dt>Скачан раз(а)</dt>
+						<dd>{v#distdowncnt}</dd>
+					</dl>
+				</div>
+			</div>
+		</td>
+		
+		</tr></tbody></table>
+    </div>
+	<div class="clear"></div>
+    
+    <div id="mod-mods-maintab" class="yui-navset">
+		<ul class="yui-nav">
+			<li class="selected">
+				<a href="#mod-mods-maintab-tabinfo"><em>Информация</em></a>
+			</li>
+			<li>
+				<a href="#mod-mods-maintab-tabscreen"><em>Скриншоты</em></a>
+			</li>
+		</ul>            
+		<div class="yui-content">
+			<div id="mod-mods-maintab-tabinfo">
+				{v#desc}
+			</div>
+			<div id="#mod-mods-maintab-tabscreen">
+				
 			</div>
 		</div>
-		<div class="info">
-			{v#mindesc}
-			{v#desc}
-		</div>
-		<div class="clear"></div>
-    </div>
+	</div>
 </div>
+
+<script>
+	Brick.ff('mods', 'tabview', function(){
+		var tab = new YAHOO.widget.TabView('mod-mods-maintab');
+		Brick.console(tab);
+	});
+</script>

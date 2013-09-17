@@ -23,7 +23,7 @@
 
 .mod-mods .moditem .micon {
 	float: left;
-	margin: 0 10px 0 0;
+	margin: 10px 20px 0 10px;
 }
 .mod-mods .moditem .micon .tmb {
 	border: 1px solid #DEE2E3;
@@ -52,11 +52,9 @@
 .mod-mods .moditem .feature .download a {
 	text-decoration: none;
 	display: block;
-	background: linear-gradient(#669be1, #5784bf) repeat scroll 0 0 #489615;
-	/* background-image: -webkit-linear-gradient(#669be1, #5784bf); /**/
+	background: linear-gradient(#9399B4, #7B83A3) repeat scroll 0 0 #489615;
 	border-radius: 5px;
 	padding: 3px 10px 4px;
-	/* box-shadow: 0 1px rgba(0, 0, 0, 0.1), 0 -2px rgba(0, 0, 0, 0.1) inset; /**/
 	color: #fff;
 }
 .mod-mods .moditem .feature .download a:HOVER {
@@ -70,6 +68,12 @@
 	padding-top: 10px;
 }
 
+.mod-mods .modlist,
+.mod-mods .modview {
+	min-height: 600px;
+}
+
+
 /* * * * Список модулей * * * */
 .mod-mods .modlist .moditem {
 	border-bottom: 1px solid #DEE2E3;
@@ -78,4 +82,66 @@
 }
 .mod-mods .modlist .more {
 	text-align: right;
+}
+
+/* * * * Просмотр модуля * * * */
+.mod-mods .modview .moditem {
+	margin-bottom: 15px;
+}
+
+.mod-mods .yui-navset .yui-content {
+	background: none !important;
+	border: none !important;
+}
+.mod-mods .yui-navset .yui-nav {
+	border: none !important;
+}
+
+.mod-mods .yui-navset .yui-nav .selected, 
+.mod-mods .yui-navset .yui-navset-top .yui-nav .selected {
+	margin: 0 2px 0 0 !important;
+}
+.mod-mods .yui-navset .yui-nav .selected a, 
+.mod-mods .yui-navset .yui-nav .selected a em {
+    border-color: #6A7398 !important;
+    background: none !important;
+}
+.mod-mods .yui-navset .yui-nav .selected a, 
+/*.mod-mods .yui-navset .yui-nav .selected a:focus, /**/
+.mod-mods .yui-navset .yui-nav .selected a:hover {
+    background: none !important;
+    border-width: 1px !important;
+}
+.mod-mods .yui-navset .yui-nav li, 
+.mod-mods .yui-navset .yui-navset-top .yui-nav li {
+	padding: 0 !important;
+}
+.mod-mods .yui-navset .yui-nav a, 
+.mod-mods .yui-navset .yui-navset-top .yui-nav a {
+    background: none !important;
+    color: #191B24 !important;
+    border-width: 1px !important;
+    
+}
+.mod-mods .yui-navset .yui-nav a em, 
+.mod-mods .yui-navset .yui-navset-top .yui-nav a em {
+    border: none !important;
+    border-width: 0 !important;
+    padding: 5px 10px !important;
+    top: 0 !important;
+}
+
+.mod-mods .yui-navset .yui-nav a, 
+.mod-mods .yui-navset .yui-navset-top .yui-nav a {
+    border-color: #6A7398 !important;
+}
+.mod-mods .yui-navset .yui-nav a {
+	border-radius: 5px !important;
+} 
+
+.mod-mods .yui-navset .yui-nav .selected a,
+.mod-mods .yui-navset .yui-nav .selected a:hover,
+.mod-mods .yui-navset .yui-nav a:focus,
+.mod-mods .yui-navset .yui-nav a:hover {
+	background-color: #E7E8EE !important;
 }
