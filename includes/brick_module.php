@@ -15,10 +15,9 @@ $cMan = ModsModule::$instance->GetManager()->cManager;
 $imgWidth = bkint($p['imgw']);
 $imgHeight = bkint($p['imgh']);
 
-Abricos::GetModule('filemanager')->EnableThumbSize(array(array(
-	"w" => $imgWidth,
-	"h" => $imgHeight
-)));
+Abricos::GetModule('filemanager')->EnableThumbSize(array(
+	array("w" => $imgWidth, "h" => $imgHeight)
+));
 
 
 $adr = Abricos::$adress;
@@ -31,7 +30,7 @@ if (empty($el)){ $brick->content = ""; return; }
 $uList = $cMan->UserList($el);
 $files = $cMan->ElementOptionFileList($el);
 
-	
+// ---------------- Фото элемента -----------------
 if (empty($el->foto)){
 	$image = $v["imgempty"];
 }else{
@@ -44,9 +43,11 @@ $image = Brick::ReplaceVarByData($image, array(
 	"h" => $imgHeight
 ));
 
+
 $dl = $el->dateline; $upd = $el->upddate;
 $user = $uList->Get($el->userid);
 
+/* * * * * * * Скачать * * * * * */
 $aTmp = explode(":", $el->ext['distrib']);
 $file = $files->Get($aTmp[0]);
 
@@ -59,6 +60,7 @@ if (!empty($file)){
 	$file->name .= ".zip";
 }
 
+// --------------- Скриншоты -----------------
 $scImgWidth = bkint($p['scimgw']);
 $scImgHeight = bkint($p['scimgh']);
 
@@ -67,25 +69,49 @@ Abricos::GetModule('filemanager')->EnableThumbSize(array(
 	array("w" => $scImgWidth, "h" => $scImgHeight)
 ));
 
-$screens = "";
+$lstScreen = "";
+$disScreens = "none";
 $fotoList = $el->detail->fotoList;
 for ($i=1; $i<$fotoList->Count(); $i++){
+	$disScreens = "";
 	$foto = $fotoList->GetByIndex($i);
-	$screens .= Brick::ReplaceVarByData($v['screen'], array(
+	$lstScreen .= Brick::ReplaceVarByData($v['screen'], array(
 		"title" => $el->title,
 		"src" => $foto->Link($scImgWidth, $scImgHeight),
 		"fsrc" => $foto->Link()
 	));
 }
 
+// --------------- Зависимость -----------------
+$lstDepends = ""; $sDependCount = ""; $depends = $el->detail->optionsBase['depends'];
+$disDepends = "none";
+$depListCfg = new CatalogElementListConfig();
+$depListCfg->elnames = explode(",", $depends);
+if (!empty($depends) && count($depListCfg->elnames) > 0){
+	$depListBrick = Brick::$builder->LoadBrickS("mods", "module_list", null, array("p" => array(
+		"cfg" => $depListCfg
+	)));
+	$depElList = $depListBrick->elementList;
+	if (!empty($depElList) && $depElList->count() > 0){
+		$sDependCount = "(".$depElList->count().")";
+		$lstDepends = $depListBrick->content;
+		$disDepends = "";
+	}
+	
+}
+		
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
 	"image" => $image,
 	"title" => addslashes(htmlspecialchars($el->title)),
 	"version" => $el->ext['version'],
 	"ulink" => $user->URL(),
 	"uname" => $user->GetUserName(),
+	"disscreens" => $disScreens,
 	"screencnt" => $fotoList->Count() <= 1 ? "" : "(".($fotoList->Count()-1).")",
-	"screens" => $screens,
+	"screens" => $lstScreen,
+	"dependscnt" => $sDependCount,
+	"depends" => $lstDepends,
+	"disdepends" => $disDepends,
 	"distdowncnt" => !empty($file) ? $file->counter : 0,
 	"downlink" => !empty($file) ? $file->URL() : "#",
 	"compat" => $el->ext['compat'],

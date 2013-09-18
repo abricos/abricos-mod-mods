@@ -107,19 +107,25 @@
 			<li class="selected">
 				<a href="#mod-mods-maintab-tabinfo"><em>Информация</em></a>
 			</li>
-			<li>
+			<li style="display: {v#disscreens}">
 				<a href="#mod-mods-maintab-tabscreen"><em>Скриншоты {v#screencnt}</em></a>
+			</li>
+			<li style="display: {v#disdepends}">
+				<a href="#mod-mods-maintab-tabdepends"><em>Зависимость {v#dependscnt}</em></a>
 			</li>
 		</ul>            
 		<div class="yui-content">
 			<div id="mod-mods-maintab-tabinfo">
 				{v#desc}
 			</div>
-			<div id="mod-mods-maintab-tabscreen">
+			<div id="mod-mods-maintab-tabscreen" style="display: {v#disscreens}">
 				<div class="screens">
 					{v#screens}
 				</div>
 				<div class="clear"></div>
+			</div>
+			<div id="mod-mods-maintab-tabdepends" style="display: {v#disdepends}">
+				{v#depends}
 			</div>
 		</div>
 	</div>
