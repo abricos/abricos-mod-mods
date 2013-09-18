@@ -61,6 +61,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 		$this->cfgElementNameChange = true;
 		$this->cfgElementNameUnique = true;
 		$this->cfgElementCreateBaseTypeDisable = true;
+		$this->cfgVersionControl = true;
 		
 	}
 	

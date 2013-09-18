@@ -69,7 +69,8 @@ Component.entryPoint = function(NS){
 			'language': LNG,
 			'elementNameChange': true,
 			'elementNameUnique': true,
-			'elementCreateBaseTypeDisable': true
+			'elementCreateBaseTypeDisable': true,
+			'versionControl': true
 		});
 	};
 	
