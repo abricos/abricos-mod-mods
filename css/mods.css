@@ -89,9 +89,21 @@
 	margin-bottom: 15px;
 }
 
+/* * * * Screens * * * */
+.mod-mods .modview .screens .screen {
+	float: left;
+	margin: 0 9px 10px 0;
+	border: 1px solid #DADADA;
+	width: 200px;
+	height: 200px;
+	overflow: hidden;
+}
+
+/* * * * TabView * * * * */
 .mod-mods .yui-navset .yui-content {
 	background: none !important;
 	border: none !important;
+	padding: 10px 0 0 0 !important;
 }
 .mod-mods .yui-navset .yui-nav {
 	border: none !important;

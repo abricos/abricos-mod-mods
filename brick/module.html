@@ -23,10 +23,21 @@
 	</a>
 [/bkvar]
 
+[p=scimgw]300[/p]
+[p=scimgh]0[/p]
+
+[bkvar=screen]
+	<div class="screen">
+		<a title="{v#title}" href="{v#fsrc}" target="_blank" class="bshowbig">
+			<img alt="{v#title}" src="{v#src}" class="thumb" />
+		</a>
+	</div>
+[/bkvar]
+
 [*]-->
 <div class="modview">
 	<div class="moditem">
-		<h3><a title="{v#title}" href="{v#link}">{v#title}</a></h3>
+		<h3><a href="/mods/">Модули</a> → <span title="{v#title}">{v#title}</span></h3>
 		<table class="mimain"><tbody><tr>
 		
 		<td>
@@ -97,15 +108,18 @@
 				<a href="#mod-mods-maintab-tabinfo"><em>Информация</em></a>
 			</li>
 			<li>
-				<a href="#mod-mods-maintab-tabscreen"><em>Скриншоты</em></a>
+				<a href="#mod-mods-maintab-tabscreen"><em>Скриншоты {v#screencnt}</em></a>
 			</li>
 		</ul>            
 		<div class="yui-content">
 			<div id="mod-mods-maintab-tabinfo">
 				{v#desc}
 			</div>
-			<div id="#mod-mods-maintab-tabscreen">
-				
+			<div id="mod-mods-maintab-tabscreen">
+				<div class="screens">
+					{v#screens}
+				</div>
+				<div class="clear"></div>
 			</div>
 		</div>
 	</div>
@@ -113,7 +127,7 @@
 
 <script>
 	Brick.ff('mods', 'tabview', function(){
-		var tab = new YAHOO.widget.TabView('mod-mods-maintab');
-		Brick.console(tab);
+		new YAHOO.widget.TabView('mod-mods-maintab');
 	});
+	Brick.f('mods', 'screens', 'initScreens');
 </script>

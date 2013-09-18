@@ -59,12 +59,33 @@ if (!empty($file)){
 	$file->name .= ".zip";
 }
 
+$scImgWidth = bkint($p['scimgw']);
+$scImgHeight = bkint($p['scimgh']);
+
+
+Abricos::GetModule('filemanager')->EnableThumbSize(array(
+	array("w" => $scImgWidth, "h" => $scImgHeight)
+));
+
+$screens = "";
+$fotoList = $el->detail->fotoList;
+for ($i=1; $i<$fotoList->Count(); $i++){
+	$foto = $fotoList->GetByIndex($i);
+	$screens .= Brick::ReplaceVarByData($v['screen'], array(
+		"title" => $el->title,
+		"src" => $foto->Link($scImgWidth, $scImgHeight),
+		"fsrc" => $foto->Link()
+	));
+}
+
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
 	"image" => $image,
 	"title" => addslashes(htmlspecialchars($el->title)),
 	"version" => $el->ext['version'],
 	"ulink" => $user->URL(),
 	"uname" => $user->GetUserName(),
+	"screencnt" => $fotoList->Count() <= 1 ? "" : "(".($fotoList->Count()-1).")",
+	"screens" => $screens,
 	"distdowncnt" => !empty($file) ? $file->counter : 0,
 	"downlink" => !empty($file) ? $file->URL() : "#",
 	"compat" => $el->ext['compat'],
