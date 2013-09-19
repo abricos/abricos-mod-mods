@@ -146,5 +146,26 @@ $brick->content = Brick::ReplaceVarByData($brick->content, array(
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
 	"desc" => $el->detail->optionsBase['desc']
 ));
-		
+
+// Вывод заголовка страницы.
+if (!empty($el->detail->metaTitle) && $el->detail->metaTitle !="&nbsp;"){
+	Brick::$builder->SetGlobalVar('meta_title', $el->detail->metaTitle);
+} else if (!empty($el->title) && $el->title !="&nbsp;"){
+	$metaTitle = Brick::ReplaceVarByData($v['metatitle'], array(
+		"eltypetitle" => $elType->title,
+		"title" => $el->title,
+		"sitename" => Brick::$builder->phrase->Get('sys', 'site_name')
+	));
+	Brick::$builder->SetGlobalVar('meta_title', $metaTitle);
+}
+
+// Вывод ключевых слов
+if (!empty($el->detail->metaKeys) && $el->detail->metaKeys !="&nbsp;"){
+	Brick::$builder->SetGlobalVar('meta_keys', $el->detail->metaKeys);
+}
+// Вывод описания
+if (!empty($el->detail->metaDesc) && $el->detail->metaDesc !="&nbsp;"){
+	Brick::$builder->SetGlobalVar('meta_desc', $el->detail->metaDesc);
+}
+
 ?>
