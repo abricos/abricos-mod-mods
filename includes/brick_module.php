@@ -108,10 +108,14 @@ $lstChLog = "";
 for ($i=0;$i<$chLogList->Count(); $i++){
 	$chLog = $chLogList->GetByIndex($i);
 	$dl = $chLog->dateline;
+	$log = $chLog->log;
+	$log = str_replace("\r\n",'<br />', $log);
+	$log = str_replace("\n",'<br />', $log);
+	
 	$lstChLog .= Brick::ReplaceVarByData($v['changelog'], array(
 		"v" => $chLog->ext['version'],
 		'dl' => date("d", $dl)." ".rusMonth($dl)." ".date("Y", $dl),
-		'chlg' => $chLog->log
+		'chlg' => $log
 	));
 }
 		
