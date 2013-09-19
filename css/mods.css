@@ -99,6 +99,34 @@
 	overflow: hidden;
 }
 
+/* * * * Changelog * * * */
+.mod-mods .modview .changelogs dl.changelog {
+	margin-bottom: 10px;
+	background-color: #E7E8EE;
+	padding: 10px 10px 15px 10px;
+}
+.mod-mods .modview .changelogs dl.changelog dt {
+	float: left;
+	clear: left;
+	width: 150px;
+}
+.mod-mods .modview .changelogs dl.changelog dd {
+	float: none;
+	margin-left: 165px;
+}
+
+.mod-mods .modview .changelogs dl.changelog dt {
+}
+.mod-mods .modview .changelogs span.version,
+.mod-mods .modview .changelogs span.date {
+	display: block;
+	text-align: center;
+}
+.mod-mods .modview .changelogs span.version {
+	font-size: 16px;
+}
+
+
 /* * * * TabView * * * * */
 .mod-mods .yui-navset .yui-content {
 	background: none !important;

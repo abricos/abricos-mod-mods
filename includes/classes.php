@@ -118,7 +118,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 		
 		return $this->ElementList($cfg);
 	}
-
+	
 }
 
 

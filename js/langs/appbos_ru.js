@@ -1,5 +1,5 @@
 Brick.util.Language.add('ru',{'mod': {'{C#MODNAME}':{
 	'app':{
-		'title': 'Модули'
+		'title': 'Каталог расширений'
 	}
 }}});

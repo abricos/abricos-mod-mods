@@ -34,10 +34,23 @@
 	</div>
 [/bkvar]
 
+[bkvar=changelog]
+	<dl class="changelog">
+		<dt>
+			<span class="version">{v#v}</span>
+			<span class="date">{v#dl}</span>
+		</dt>
+		<dd>
+			{v#chlg}
+		</dd>
+	</dl>
+[/bkvar]
+
+
 [*]-->
 <div class="modview">
 	<div class="moditem">
-		<h3><a href="/mods/">Модули</a> → <span title="{v#title}">{v#title}</span></h3>
+		<h3><a href="/mods/">Каталог расширений</a> → <span title="{v#title}">{v#eltypetitle} «{v#title}»</span></h3>
 		<table class="mimain"><tbody><tr>
 		
 		<td>
@@ -82,13 +95,11 @@
 						<dt>Добавлен</dt>
 						<dd>{v#dateline}</dd>
 					</dl>
-					<div style="display: none">
-						<div class="sep">|</div>
-						<dl class="opt-compat">
-							<dt>Обновлен</dt>
-							<dd>{v#upddate}</dd>
-						</dl>
-					</div>
+					<div class="sep">|</div>
+					<dl class="opt-compat">
+						<dt>Обновлен</dt>
+						<dd>{v#upddate}</dd>
+					</dl>
 					<div class="clear"></div>
 					<dl class="opt-distrib-cnt">
 						<dt>Скачан раз(а)</dt>
@@ -113,6 +124,9 @@
 			<li style="display: {v#disdepends}">
 				<a href="#mod-mods-maintab-tabdepends"><em>Зависимость {v#dependscnt}</em></a>
 			</li>
+			<li>
+				<a href="#mod-mods-maintab-tabchlog"><em>Список изменений</em></a>
+			</li>
 		</ul>            
 		<div class="yui-content">
 			<div id="mod-mods-maintab-tabinfo">
@@ -126,6 +140,13 @@
 			</div>
 			<div id="mod-mods-maintab-tabdepends" style="display: {v#disdepends}">
 				{v#depends}
+				<div class="clear"></div>
+			</div>
+			<div id="mod-mods-maintab-tabchlog" >
+				<div class="changelogs">
+					{v#changelog}
+				</div>
+				<div class="clear"></div>
 			</div>
 		</div>
 	</div>

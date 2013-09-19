@@ -27,6 +27,9 @@ $el = $cMan->Module($modName);
 
 if (empty($el)){ $brick->content = ""; return; }
 
+$elTypeList = $cMan->ElementTypeList();
+$elType = $elTypeList->Get($el->elTypeId);
+
 $uList = $cMan->UserList($el);
 $files = $cMan->ElementOptionFileList($el);
 
@@ -97,15 +100,29 @@ if (!empty($depends) && count($depListCfg->elnames) > 0){
 		$lstDepends = $depListBrick->content;
 		$disDepends = "";
 	}
-	
+}
+
+// --------------- Changelog -----------------
+$chLogList = $cMan->ElementChangeLogListByName($el->name, "version");
+$lstChLog = "";
+for ($i=0;$i<$chLogList->Count(); $i++){
+	$chLog = $chLogList->GetByIndex($i);
+	$dl = $chLog->dateline;
+	$lstChLog .= Brick::ReplaceVarByData($v['changelog'], array(
+		"v" => $chLog->ext['version'],
+		'dl' => date("d", $dl)." ".rusMonth($dl)." ".date("Y", $dl),
+		'chlg' => $chLog->log
+	));
 }
 		
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
 	"image" => $image,
+	"eltypetitle" => $elType->title,
 	"title" => addslashes(htmlspecialchars($el->title)),
 	"version" => $el->ext['version'],
 	"ulink" => $user->URL(),
 	"uname" => $user->GetUserName(),
+	"changelog" => $lstChLog,
 	"disscreens" => $disScreens,
 	"screencnt" => $fotoList->Count() <= 1 ? "" : "(".($fotoList->Count()-1).")",
 	"screens" => $lstScreen,
@@ -116,7 +133,7 @@ $brick->content = Brick::ReplaceVarByData($brick->content, array(
 	"downlink" => !empty($file) ? $file->URL() : "#",
 	"compat" => $el->ext['compat'],
 	"dateline" => date("d", $dl)." ".rusMonth($dl)." ".date("Y", $dl),
-	"upddate" => date("d", $upd)." ".rusMonth($upd)." ".date("Y", $upd),
+	"upddate" => date("d", $el->dateline)." ".rusMonth($el->dateline)." ".date("Y", $el->dateline),
 	"mindesc" => $el->ext['mindesc'],
 	"link" => $el->URI()
 ));

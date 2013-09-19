@@ -58,5 +58,9 @@ if ($updateManager->isInstall()){
 		"nm" => "template",
 		"tl" => "Шаблон"
 	));
+	$cManager->ElementTypeSave(0, array(
+		"nm" => "template",
+		"tl" => "Сборка"
+	));
 }
 ?>

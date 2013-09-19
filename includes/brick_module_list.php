@@ -44,6 +44,8 @@ $elList = $cMan->ModuleList($cfg);
 $brick->elementList = $elList;
 if (empty($elList)){ $brick->content = ""; return; }
 
+$elTypeList = $cMan->ElementTypeList();
+
 $uList = $cMan->UserList($elList);
 $files = $cMan->ElementOptionFileList($elList);
 
@@ -77,8 +79,11 @@ for ($i=0;$i<$elList->Count();$i++){
 		$file->name .= ".zip";
 	}
 	
+	$elType = $elTypeList->Get($el->elTypeId);
+	
 	$replace = array(
 		"image" => $image,
+		"eltypetitle" => $elType->title,
 		"title" => addslashes(htmlspecialchars($el->title)),
 		"version" => $el->ext['version'],
 		"ulink" => $user->URL(),
