@@ -103,7 +103,9 @@
 .mod-mods .modview .changelogs dl.changelog {
 	margin-bottom: 10px;
 	background-color: #E7E8EE;
+	display: block;
 	padding: 10px 10px 15px 10px;
+	min-height: 42px;
 }
 .mod-mods .modview .changelogs dl.changelog dt {
 	float: left;
@@ -115,8 +117,6 @@
 	margin-left: 165px;
 }
 
-.mod-mods .modview .changelogs dl.changelog dt {
-}
 .mod-mods .modview .changelogs span.version,
 .mod-mods .modview .changelogs span.date {
 	display: block;
