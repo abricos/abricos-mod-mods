@@ -49,6 +49,16 @@ class ModsManager extends Ab_ModuleManager {
 		return $this->IsRoleEnable(ModsAction::ADMIN);
 	}
 	
+	public function IsModeratorRole(){
+		if ($this->IsAdminRole()){ return true; }
+		return $this->IsRoleEnable(ModsAction::MODERATOR);
+	}
+	
+	public function IsOperatorRole(){
+		if ($this->IsAdminRole()){ return true; }
+		return $this->IsRoleEnable(ModsAction::OPERATOR);
+	}
+	
 	public function IsWriteRole(){
 		if ($this->IsAdminRole()){ return true; }
 		return $this->IsRoleEnable(ModsAction::WRITE);
@@ -58,6 +68,7 @@ class ModsManager extends Ab_ModuleManager {
 		if ($this->IsWriteRole()){ return true; }
 		return $this->IsRoleEnable(ModsAction::VIEW);
 	}
+	
 	
 	public function AJAX($d){
 		$ret = $this->cManager->AJAX($d);

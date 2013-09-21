@@ -25,7 +25,7 @@ class ModsModule extends Ab_Module {
 	private $_manager = null;
 	
 	public function ModsModule(){
-		$this->version = "0.1";
+		$this->version = "0.1.1";
 		$this->name = "mods";
 		$this->takelink = "mods";
 		ModsModule::$instance = $this;
@@ -73,6 +73,8 @@ class ModsModule extends Ab_Module {
 class ModsAction {
 	const VIEW = 10;
 	const WRITE = 30;
+	const OPERATOR = 40;
+	const MODERATOR = 45;
 	const ADMIN = 50;
 }
 
@@ -85,7 +87,9 @@ class ModsPermission extends Ab_UserPermission {
 			new Ab_UserRole(ModsAction::VIEW, Ab_UserGroup::ADMIN),
 
 			new Ab_UserRole(ModsAction::WRITE, Ab_UserGroup::ADMIN),
-
+			new Ab_UserRole(ModsAction::OPERATOR, Ab_UserGroup::ADMIN),
+			new Ab_UserRole(ModsAction::MODERATOR, Ab_UserGroup::ADMIN),
+				
 			new Ab_UserRole(ModsAction::ADMIN, Ab_UserGroup::ADMIN),
 		);
 		parent::__construct($module, $defRoles);
@@ -95,6 +99,8 @@ class ModsPermission extends Ab_UserPermission {
 		return array(
 			ModsAction::VIEW => $this->CheckAction(ModsAction::VIEW),
 			ModsAction::WRITE => $this->CheckAction(ModsAction::WRITE),
+			ModsAction::OPERATOR => $this->CheckAction(ModsAction::OPERATOR),
+			ModsAction::MODERATOR => $this->CheckAction(ModsAction::MODERATOR),
 			ModsAction::ADMIN => $this->CheckAction(ModsAction::ADMIN)
 		);
 	}

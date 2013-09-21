@@ -6,7 +6,7 @@
 var Component = new Brick.Component();
 Component.entryPoint = function(){
 	
-	if (Brick.Permission.check('mods', '50') != 1){ return; }
+	if (Brick.Permission.check('{C#MODNAME}', '40') != 1){ return; }
 	
 	var os = Brick.mod.bos;
 	

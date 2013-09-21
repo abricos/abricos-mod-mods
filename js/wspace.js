@@ -69,6 +69,9 @@ Component.entryPoint = function(NS){
 			});
 		},
 		onLoadManager: function(pgInfo){
+			if (R.isAdmin){
+				this.elShow('mcatalogconfig');
+			}
 			this.showPage(pgInfo);
 		},
 		showPage: function(p){

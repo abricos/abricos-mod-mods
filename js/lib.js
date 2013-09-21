@@ -14,7 +14,7 @@ Component.entryPoint = function(NS){
 
 	var L = YAHOO.lang,
 		R = NS.roles;
-	
+
 	var SysNS = Brick.mod.sys;
 	var LNG = this.language;
 	var NSCat = Brick.mod.catalog;
@@ -64,13 +64,16 @@ Component.entryPoint = function(NS){
 	NS.manager = null;
 	
 	NS.initManager = function(callback){
-		NSCat.initManager('{C#MODNAME}', callback, {
-			'ElementClass': NS.Element,
-			'language': LNG,
-			'elementNameChange': true,
-			'elementNameUnique': true,
-			'elementCreateBaseTypeDisable': true,
-			'versionControl': true
+		R.load(function(){
+			NSCat.initManager('{C#MODNAME}', callback, {
+				'roles': R,
+				'ElementClass': NS.Element,
+				'language': LNG,
+				'elementNameChange': true,
+				'elementNameUnique': true,
+				'elementCreateBaseTypeDisable': true,
+				'versionControl': true
+			});
 		});
 	};
 	

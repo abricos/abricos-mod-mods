@@ -63,4 +63,8 @@ if ($updateManager->isInstall()){
 		"tl" => "Сборка"
 	));
 }
+
+if ($updateManager->isUpdate('0.1.1') && !$updateManager->isInstall()){
+	Abricos::GetModule('mods')->permission->Reinstall();
+}
 ?>

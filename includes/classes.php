@@ -69,6 +69,14 @@ class ModsCatalogManager extends CatalogModuleManager {
 		return $this->manager->IsAdminRole();
 	}
 	
+	public function IsModeratorRole(){
+		return $this->manager->IsModeratorRole();
+	}
+	
+	public function IsOperatorRole(){
+		return $this->manager->IsOperatorRole();
+	}
+	
 	public function IsWriteRole(){
 		return $this->manager->IsWriteRole();
 	}
