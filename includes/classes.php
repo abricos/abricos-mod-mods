@@ -127,6 +127,67 @@ class ModsCatalogManager extends CatalogModuleManager {
 		return $this->ElementList($cfg);
 	}
 	
+	public function OnElementAppendByOperator($elementid){
+		$el = $this->Element($elementid);
+		if (empty($el)){ return; }
+		
+		$elTypeList =  $this->ElementTypeList();
+		$elType = $elTypeList->get($el->elTypeId);
+		
+		$brick = Brick::$builder->LoadBrickS('mods', 'templates', null, null);
+		$host = $_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : $_ENV['HTTP_HOST'];
+		$elLink = "http://".$host.$el->URI();
+		$email = Brick::$builder->phrase->Get('sys', 'admin_mail');
+		
+		if (empty($email)){ return; }
+		
+		$subject = Brick::ReplaceVarByData($brick->param->var['elnewmodersubj'], array(
+			"tptl" => $elType->title,
+			"tl" => $el->title
+		));
+		$body = Brick::ReplaceVarByData($brick->param->var['elnewmoder'], array(
+			"email" => $email,
+			"ellnk" => $elLink,
+			"tptl" => $elType->title,
+			"tl" => $el->title,
+			"unm" => $this->user->info['username'],
+			"sitename" => Brick::$builder->phrase->Get('sys', 'site_name')
+		));
+		Abricos::Notify()->SendMail($email, $subject, $body);
+	}
+	
+	public function OnElementModer($elementid){
+		$el = $this->Element($elementid, true);
+		if (empty($el)){ return; }
+		
+		$elTypeList =  $this->ElementTypeList();
+		$elType = $elTypeList->get($el->elTypeId);
+		
+		$brick = Brick::$builder->LoadBrickS('mods', 'templates', null, null);
+		$host = $_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : $_ENV['HTTP_HOST'];
+		$elLink = "http://".$host.$el->URI();
+		
+		$user = $this->UserByElement($el);
+		if (empty($user)){ return; }
+		
+		$email = $user->email;
+		if (empty($email)){ return; }
+		
+		$subject = Brick::ReplaceVarByData($brick->param->var['elmodersubj'], array(
+			"tptl" => $elType->title,
+			"tl" => $el->title
+		));
+		$body = Brick::ReplaceVarByData($brick->param->var['elmoder'], array(
+			"email" => $email,
+			"ellnk" => $elLink,
+			"tptl" => $elType->title,
+			"tl" => $el->title,
+			"unm" => $this->user->info['username'],
+			"sitename" => Brick::$builder->phrase->Get('sys', 'site_name')
+		));
+		Abricos::Notify()->SendMail($email, $subject, $body);		
+	}
+	
 }
 
 
