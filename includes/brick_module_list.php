@@ -20,11 +20,22 @@ Abricos::GetModule('filemanager')->EnableThumbSize(array(array(
 	"h" => $imgHeight
 )));
 
-if (is_object($p['cfg'])){
+$elTypeList = $cMan->ElementTypeList();
+
+if (is_object($p['cfg'])){ // сборку вызывает другий кирпич
 	$cfg = $p['cfg'];
-}else{
+}else{ // сборку вызывает стартовый кирпич
+	
 	$cfg = new CatalogElementListConfig();
 	$cfg->limit = $p['limit'];
+
+	$curElTypeName = ModsModule::$instance->currentElTypeName;
+	if (!empty($curElTypeName)){
+		$elType = $elTypeList->GetByName($curElTypeName);
+		if (!empty($curElTypeName)){
+			array_push($cfg->eltpids, $elType->id);
+		}
+	}
 }
 
 $cfg->catids = array(0);
@@ -43,8 +54,6 @@ $elList = $cMan->ModuleList($cfg);
 
 $brick->elementList = $elList;
 if (empty($elList)){ $brick->content = ""; return; }
-
-$elTypeList = $cMan->ElementTypeList();
 
 $uList = $cMan->UserList($elList);
 $files = $cMan->ElementOptionFileList($elList);

@@ -52,15 +52,18 @@ if ($updateManager->isInstall()){
 	
 	$cManager->ElementTypeSave(0, array(
 		"nm" => "module",
-		"tl" => "Модуль"
+		"tl" => "Модуль",
+		"tls"=> "Модули"
 	));
 	$cManager->ElementTypeSave(0, array(
 		"nm" => "template",
-		"tl" => "Шаблон"
+		"tl" => "Шаблон",
+		"tls"=> "Шаблоны"
 	));
 	$cManager->ElementTypeSave(0, array(
-		"nm" => "template",
-		"tl" => "Сборка"
+		"nm" => "distrib",
+		"tl" => "Сборка",
+		"tls"=> "Сборки"
 	));
 }
 

@@ -83,14 +83,53 @@ class ModsManager extends Ab_ModuleManager {
 	 * @param SMMenuItem $menuItem
 	 */
 	public function Sitemap_MenuBuild(SMMenuItem $mItem){
-		$modList = $this->cManager->ModuleList();
-
 		require_once 'smclasses.php';
 		
-		for ($i=0; $i<$modList->Count(); $i++){
-			$cmItem = new ModsMenuItem($mItem, $modList->GetByIndex($i));
-			$mItem->childs->Add($cmItem);
+		$cMan = $this->cManager;
+		$mId = 1;
+		
+		$stat = $cMan->StatisticElementList();
+		$mItems = array();
+
+		$elTypeList = $cMan->ElementTypeList();
+		for ($i=1;$i<$elTypeList->Count();$i++){
+			$elType = $elTypeList->GetByIndex($i);
+			$elTpCnt = $stat->elTypeCounter[$elType->id];
+			if ($elTpCnt > 0){
+				$cmItem = new ModsElementTypeMenuItem($mItem, $mId++, $elType, $elTpCnt);
+				$mItems[$elType->id] = $cmItem;
+				if ($elType->name == ModsModule::$instance->currentElTypeName){
+					$cmItem->isSelect = true;
+				}
+			}
 		}
+		
+		$modList = $this->cManager->ModuleList();
+		$curModName = ModsModule::$instance->currentModuleName;
+		
+		if (count($mItems) >= 2){
+			for ($i=0; $i<$modList->Count(); $i++){
+				$el = $modList->GetByIndex($i);
+				$mTpItem = $mItems[$el->elTypeId];
+				$cmItem = new ModsElementMenuItem($mTpItem, $mId++, $el, true);
+				$mTpItem->childs->Add($cmItem);
+				if ($el->name == $curModName){
+					$cmItem->isSelect = true;
+					$mTpItem->isSelect = true;
+					$mItem->isSelect = true;
+				}
+			}
+			foreach($mItems as $elTypeId => $cmItem){
+				$mItem->childs->Add($cmItem);
+			}
+		}else{
+			
+			for ($i=0; $i<$modList->Count(); $i++){
+				$cmItem = new ModsElementMenuItem($mItem, $mId++, $modList->GetByIndex($i));
+				$mItem->childs->Add($cmItem);
+			}
+		}
+		
 	}
 	
 }

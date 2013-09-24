@@ -6,27 +6,52 @@
  * @author Alexander Kuzmin <roosit@abricos.org>
  */
 
-class ModsMenuItem extends SMMenuItem {
+class ModsElementTypeMenuItem extends SMMenuItem {
+
+	/**
+	 * @var CatalogElementType
+	 */
+	public $elType;
+
+	/**
+	 *
+	 * @param SMMenuItem $parent
+	 * @param CatalogElementType $elType
+	 */
+	public function __construct(SMMenuItem $parent, $id, $elType, $cnt){
+		parent::__construct(array(
+			"id" => SMMenuItem::ToGlobalId("mods", $id),
+			"pid" => $parent->id,
+			"lnk" => "/mods/?tp=".$elType->name,
+			// "nm" => "tp_".$elType->name,
+			"tl" => ($elType->titleList." (".$cnt.")")
+		));
+		$this->elType = $elType;
+	}
+}
+
+class ModsElementMenuItem extends SMMenuItem {
 	
 	/**
-	 * @var ModsModule
+	 * @var ModsElement
 	 */
-	public $mod;
+	public $element;
 	
 	/**
 	 * 
 	 * @param SMMenuItem $parent
-	 * @param ModsModule $el
+	 * @param ModsElement $el
 	 */
-	public function __construct(SMMenuItem $parent, $el){
+	public function __construct(SMMenuItem $parent, $id, $el, $isLink = false){
 		parent::__construct(array(
-			"id" => SMMenuItem::ToGlobalId("mods", $el->id),
+			"id" => SMMenuItem::ToGlobalId("mods", $id),
 			"pid" => $parent->id,
+			"lnk" => ($isLink ? $el->URI() : ""),
 			"nm" => $el->name,
 			"tl" => $el->title
 		));
 		
-		$this->mod = $el;
+		$this->element = $el;
 	}
 }
 

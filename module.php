@@ -25,7 +25,7 @@ class ModsModule extends Ab_Module {
 	private $_manager = null;
 	
 	public function ModsModule(){
-		$this->version = "0.1.1";
+		$this->version = "0.1.2";
 		$this->name = "mods";
 		$this->takelink = "mods";
 		ModsModule::$instance = $this;
@@ -46,16 +46,32 @@ class ModsModule extends Ab_Module {
 		return $this->_manager;
 	}
 	
+	/**
+	 * Текущий модуль
+	 * @var string
+	 */
+	public $currentModuleName = '';
+	
+	/**
+	 * Текущий список типа элементов каталога
+	 * @var string
+	 */
+	public $currentElTypeName = '';
+	
 	public function GetContentName(){
 		$adress = Abricos::$adress;
 		
-		if ($adress->level >= 2){
+		$this->currentElTypeName = Abricos::CleanGPC('g', 'tp', TYPE_STR);
+		
+		if ($adress->level >= 2 && empty($this->currentElTypeName)){
 			$modName = $adress->dir[1];
 			$cMan = $this->GetManager()->cManager;
 			
 			// TODO: необходимо организовать кеширование
 			$el = $cMan->Module($modName);
 			if (empty($el)){ return ''; }
+			
+			$this->currentModuleName = $modName;
 			
 			return 'module';
 		}
