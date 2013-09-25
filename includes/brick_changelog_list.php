@@ -22,8 +22,11 @@ $chLogList = $cMan->ElementChangeLogList('version');
 
 $lst = "";
 
-for ($i=0;$i<$elList->Count();$i++){
-	$el = $elList->GetByIndex($i);
+for ($i=0;$i<$chLogList->Count();$i++){
+
+	$chLog = $chLogList->GetByIndex($i);
+	$el = $elList->Get($chLog->id);
+	if (empty($el)){ continue; }
 
 	$elType = $elTypeList->Get($el->elTypeId);
 	
