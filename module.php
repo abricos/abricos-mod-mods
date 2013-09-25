@@ -52,6 +52,8 @@ class ModsModule extends Ab_Module {
 	 */
 	public $currentModuleName = '';
 	
+	public $currentScreensPage = false;
+	
 	/**
 	 * Текущий список типа элементов каталога
 	 * @var string
@@ -63,7 +65,12 @@ class ModsModule extends Ab_Module {
 		
 		$this->currentElTypeName = Abricos::CleanGPC('g', 'tp', TYPE_STR);
 		
-		if ($adress->level >= 2 && empty($this->currentElTypeName)){
+		$cPage = Abricos::CleanGPC('g', 'p', TYPE_STR);
+		
+		if ($cPage == 'screens'){
+			$this->currentScreensPage = true;
+			return 'screens';
+		}else if ($adress->level >= 2 && empty($this->currentElTypeName)){
 			$modName = $adress->dir[1];
 			$cMan = $this->GetManager()->cManager;
 			

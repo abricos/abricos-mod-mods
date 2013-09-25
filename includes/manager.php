@@ -130,6 +130,20 @@ class ModsManager extends Ab_ModuleManager {
 			}
 		}
 		
+		// скриншоты
+		$cmItem = new SMMenuItem(array(
+			"id" => SMMenuItem::ToGlobalId("mods", $mId++),
+			"pid" => $mItem->id,
+			"lnk" => "/mods/?p=screens",
+			"tl" => ModsModule::$instance->lang['screen_title']
+		));
+		$mItem->childs->Add($cmItem);
+		
+		if (ModsModule::$instance->currentScreensPage){
+			$cmItem->isSelect = true;
+			$mItem->isSelect = true;
+		}
+		
 	}
 	
 }
