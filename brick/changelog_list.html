@@ -1,0 +1,33 @@
+<!--[*]
+[script]brick_changelog_list.php[/script]
+[mcss=mods]mods.css[/mcss]
+
+[bkvar=changelog]
+	<dl class="changelog">
+		<dt>
+			<span class="version">{v#v}</span>
+			<span class="date">{v#dl}</span>
+		</dt>
+		<dd>
+			{v#chlg}
+		</dd>
+	</dl>
+[/bkvar]
+
+[bkvar=modview]
+	<div class="moditem">
+		<h4><a href="{v#lnk}" title="{v#title}">{v#eltypetitle} «{v#title}»</a></h4>
+		
+		<div class="changelogs">
+			{v#changelog}
+		</div>
+		<div class="clear"></div>
+	</div>
+
+[/bkvar]
+
+[bkvar=metatitle]Список изменений / Каталог расширений / {v#sitename}[/bkvar]
+[*]-->
+<div class="modschangelogs">
+	{v#list}
+</div>

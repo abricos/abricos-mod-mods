@@ -143,6 +143,19 @@ class ModsManager extends Ab_ModuleManager {
 			$cmItem->isSelect = true;
 			$mItem->isSelect = true;
 		}
+
+		// список изменений
+		$cmItem = new SMMenuItem(array(
+			"id" => SMMenuItem::ToGlobalId("mods", $mId++),
+			"pid" => $mItem->id,
+			"lnk" => "/mods/?p=changelogs",
+			"tl" => ModsModule::$instance->lang['changelog_title']
+		));
+		$mItem->childs->Add($cmItem);
+		if (ModsModule::$instance->currentChangelogsPage){
+			$cmItem->isSelect = true;
+			$mItem->isSelect = true;
+		}
 		
 	}
 	

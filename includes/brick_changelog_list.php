@@ -16,37 +16,48 @@ $elList = $cMan->ModuleList();
 
 if (empty($elList)){ $brick->content = ""; return; }
 
-$scImgWidth = bkint($p['scimgw']);
-$scImgHeight = bkint($p['scimgh']);
-Abricos::GetModule('filemanager')->EnableThumbSize(array(
-		array("w" => $scImgWidth, "h" => $scImgHeight)
-));
-
 $elTypeList = $cMan->ElementTypeList();
-$elsFotos = $cMan->ElementFotoList($elList);
+
+$chLogList = $cMan->ElementChangeLogList('version');
 
 $lst = "";
+
 for ($i=0;$i<$elList->Count();$i++){
 	$el = $elList->GetByIndex($i);
 
 	$elType = $elTypeList->Get($el->elTypeId);
-
-	$lstScreen = "";
-	$fotos = $elsFotos->GetGroup($el->id);
-	for ($ii=1; $ii<count($fotos); $ii++){
-		$foto = $fotos[$ii];
-		$lstScreen .= Brick::ReplaceVarByData($v['screen'], array(
-			"title" => $el->title,
-			"src" => $foto->Link($scImgWidth, $scImgHeight),
-			"fsrc" => $foto->Link()
-		));
-	}
-	if (empty($lstScreen)){ continue; }
+	
+	$elid = $el->id;
+	
+	$lstChLog = "";
+	do{
+		$chLog = $chLogList->Get($elid);
+		if (!empty($chLog)){
+			
+			$dl = $chLog->dateline;
+			$log = $chLog->log;
+			$log = str_replace("\r\n",'<br />', $log);
+			$log = str_replace("\n",'<br />', $log);
+			
+			$lstChLog .= Brick::ReplaceVarByData($v['changelog'], array(
+				"v" => $chLog->ext['version'],
+				'dl' => date("d", $dl)." ".rusMonth($dl)." ".date("Y", $dl),
+				'chlg' => $log
+			));
+			$elid = $chLog->pvElementId;
+		} else {
+			$elid = 0;
+		}
+		
+	}while($elid > 0);
+	
+	if (empty($lstChLog)){ continue; }
+	
 	$lst .= Brick::ReplaceVarByData($v['modview'], array(
 		"title" => $el->title,
 		"eltypetitle" => $elType->title,
 		"lnk" => $el->URI(),
-		"screens" => $lstScreen
+		"changelog" => $lstChLog
 	));
 }
 

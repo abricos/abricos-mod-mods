@@ -100,29 +100,29 @@
 }
 
 /* * * * Changelog * * * */
-.mod-mods .modview .changelogs dl.changelog {
+.mod-mods .changelogs dl.changelog {
 	margin-bottom: 10px;
 	background-color: #E7E8EE;
 	display: block;
 	padding: 10px 10px 15px 10px;
 	min-height: 42px;
 }
-.mod-mods .modview .changelogs dl.changelog dt {
+.mod-mods .changelogs dl.changelog dt {
 	float: left;
 	clear: left;
 	width: 150px;
 }
-.mod-mods .modview .changelogs dl.changelog dd {
+.mod-mods .changelogs dl.changelog dd {
 	float: none;
 	margin-left: 165px;
 }
 
-.mod-mods .modview .changelogs span.version,
-.mod-mods .modview .changelogs span.date {
+.mod-mods .changelogs span.version,
+.mod-mods .changelogs span.date {
 	display: block;
 	text-align: center;
 }
-.mod-mods .modview .changelogs span.version {
+.mod-mods .changelogs span.version {
 	font-size: 16px;
 }
 
