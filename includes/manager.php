@@ -35,6 +35,8 @@ class ModsManager extends Ab_ModuleManager {
 		ModsManager::$instance = $this;
 		
 		$this->cManager = new ModsCatalogManager();
+		
+		$this->config = new ModsConfig(Abricos::$config['module']['mods']);
 	}
 	
 	/**

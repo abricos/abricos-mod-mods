@@ -69,7 +69,9 @@ class ModsModule extends Ab_Module {
 		
 		$cPage = Abricos::CleanGPC('g', 'p', TYPE_STR);
 		
-		if ($cPage == 'changelogs'){
+		if ($adress->level > 2 && $adress->dir[1] == 'download'){
+			return 'download';
+		}else if ($cPage == 'changelogs'){
 			$this->currentChangelogsPage = true;
 			return 'changelogs';
 		}else if ($cPage == 'screens'){

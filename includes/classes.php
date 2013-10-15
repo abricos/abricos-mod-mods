@@ -15,10 +15,40 @@ class ModsConfig {
 	 */
 	public static $instance;
 	
+	/**
+	 * Осуществлять сборку при скачивании
+	 * @var boolean
+	 */
+	public $buildDownload = false;
+	
+	
+	/**
+	 * Структура/правила сборки файла для скачивания.
+	 * 
+	 * Пример структуры платформы Абрикос:
+	 * $buildStructure = array(
+	 * 	"module" => array(
+	 * 		"subdir" => "{v#name}",
+	 * 		"changelog" => "CHANGELOG.txt" // генерировать changelog.txt, если его нет в исходном архиве
+	 * 	)
+	 * );
+	 * 
+	 * @var array|null
+	 */
+	public $buildStructure = null;
+	
 	public function __construct($cfg){
 		ModsConfig::$instance = $this;
 		
 		if (empty($cfg)){ $cfg = array(); }
+		
+		if (isset($cfg['buildDownload'])){
+			$this->buildDownload = $cfg['buildDownload'];
+		}
+
+		if (isset($cfg['buildStructure'])){
+			$this->buildStructure = $cfg['buildStructure'];
+		}
 	}
 }
 
@@ -102,6 +132,128 @@ class ModsCatalogManager extends CatalogModuleManager {
 		$el->ext['mindesc'] = $ext['mindesc'];
 		
 		return $el;
+	}
+
+	/**
+	 * Получить собранный для скачивания файл элемента каталога
+	 * 
+	 * @param string $name Имя элемента
+	 * @return string|null
+	 */
+	public function ElementBuildDownloadFile($name){
+		$el = $this->Module($name);
+		if (empty($el)){ return null; }
+		
+		$elTypeList = $this->ElementTypeList();
+		$elType = $elTypeList->Get($el->elTypeId);
+		$files = $this->ElementOptionFileList($el);
+		
+		$aTmp = explode(":", $el->ext['distrib']);
+		$file = $files->Get($aTmp[0]);
+		if (empty($file)){
+			return null;
+		}
+		
+		$version = $el->ext['version'];
+		if (empty($version)){
+			$version = $file->id;
+		}
+		
+		$cachePath = CWD."/cache/mods/".$el->name."/".$version."/";
+		
+		$tmpPath = $cachePath."tmp/";
+		if (!is_dir($tmpPath)){
+			if (!@mkdir($tmpPath, 0777, true)){
+				return null;
+			}
+		}
+		
+		$fmMod = Abricos::GetModule('filemanager');
+		if (empty($fmMod)){ return null; }
+		
+		$fmMod->GetManager();
+		$fmMan = FileManager::$instance;
+		
+		$origFile = $cachePath."origin.zip";
+		if (!file_exists($origFile)){
+			// сохранить файл из БД на диск
+			if (!$fmMan->SaveFileTo($file->id, $origFile)){
+				return null;
+			};
+		}
+		
+		// создать папку исходников
+		$srcPath = $cachePath."src/";
+		if (is_dir($srcPath)){
+			@rmdir($srcPath);
+		}
+		if (!is_dir($srcPath)){
+			
+			if (!is_dir($srcPath)){
+				if (!@mkdir($srcPath, 0777, true)){
+					return $origFile;
+				}
+			}
+		}
+		// извлечь исходник
+		if (count(glob($srcPath."*")) == 0){
+			@($zip = new ZipArchive());
+			if (empty($zip)){
+				return $origFile;
+			}
+				
+			if ($zip->open($origFile) === true){
+				$zip->extractTo($srcPath);
+				$zip->close();
+			}
+		}
+		
+		$bldStructs = ModsConfig::$instance->buildStructure;
+		if (empty($bldStructs) || empty($bldStructs[$elType->name])){
+			return $origFile;
+		}
+		
+		$bldStruct = $bldStructs[$elType->name];
+		$subDir = $srcPath;
+		if (!empty($bldStruct['subdir'])){
+			$subDir .= str_replace("{v#name}", $el->name, $bldStruct['subdir'])."/";
+		}
+		
+		// сохранить changelog, если описана структура в конфиге
+		if (!empty($bldStruct['changelog'])){
+			$chlogFile = $subDir.$bldStruct['changelog'];
+			@unlink($chlogFile);
+			if (!file_exists($chlogFile) && ($handle = fopen($chlogFile, 'w'))){
+				
+				$chLogList = $this->ElementChangeLogListByName($el->name, "version");
+				$lstChLog = "";
+				for ($i=0;$i<$chLogList->Count(); $i++){
+					$chLog = $chLogList->GetByIndex($i);
+					$dl = $chLog->dateline;
+					$log = $chLog->log;
+
+					$lstChLog .= $el->name." ".$chLog->ext['version'].", ";
+					$lstChLog .= " ". date("Y-m-d", $dl)."\n";
+					$lstChLog .= "------------------------\n";
+					
+					$log = str_replace("\r\n",'[[rn]]', $log);
+					$log = str_replace("\n",'[[rn]]', $log);
+					$alog = explode("[[rn]]", $log);
+					foreach($alog as $s){
+						$s = trim($s);
+						if (empty($s)){ continue; }
+						
+						$lstChLog .= $s."\n";
+					}
+
+					$lstChLog .= "\n";
+						
+				}
+				
+				fwrite($handle, $lstChLog);
+				fclose($handle);
+			}
+		}
 	}
 	
 	/**

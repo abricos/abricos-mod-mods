@@ -70,4 +70,23 @@ if ($updateManager->isInstall()){
 if ($updateManager->isUpdate('0.1.1') && !$updateManager->isInstall()){
 	Abricos::GetModule('mods')->permission->Reinstall();
 }
+
+if ($updateManager->isUpdate('0.1.3')){
+	$cManager->ElementTypeSave(0, array(
+		"nm" => "core",
+		"tl" => "Ядро",
+		"tls"=> "Ядро"
+	));
+	$cManager->ElementTypeSave(0, array(
+		"nm" => "tools",
+		"tl" => "Утилита",
+		"tls"=> "Утилиты"
+	));
+	$cManager->ElementOptionSave(0, array(
+		"nm" => "buildpath", "tl" => "Путь сборки",
+		"tp" => Catalog::TP_STRING, "ord" => $ord--,
+		"sz" => 150
+	));
+	
+}
 ?>
