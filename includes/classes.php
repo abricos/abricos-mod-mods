@@ -29,8 +29,16 @@ class ModsConfig {
 	 * $buildStructure = array(
 	 * 	"module" => array(
 	 * 		"subdir" => "{v#name}",
+	 * 		"builddir" => "modules", // собирать в папку modules
 	 * 		"changelog" => "CHANGELOG.txt" // генерировать changelog.txt, если его нет в исходном архиве
-	 * 	)
+	 * 	),
+	 * 	"core" => array(
+	 * 		"changelog" => "CHANGELOG.txt"
+	 * 	),
+	 *	"distrib" => array(
+	 *		"depends" => true, // при загрузке включить зависимые модули
+	 *		"changelog" => "CHANGELOG.txt"
+	 *	)
 	 * );
 	 * 
 	 * @var array|null
@@ -88,6 +96,18 @@ class ModsElementList extends CatalogElementList {
 	 */
 	public function GetByIndex($i){
 		return parent::GetByIndex($i);
+	}
+	
+	public function GetByName($elName){
+		$cnt = $this->Count();
+		
+		for ($i=0;$i<$cnt;$i++){
+			$el = $this->GetByIndex($i);
+			if ($el->name == $elName){
+				return $el;
+			}
+		}
+		return null;
 	}
 	
 	public function ToAJAX(){
@@ -189,6 +209,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 		$el->ext['distrib'] = $ext['distrib'];
 		$el->ext['compat'] = $ext['compat'];
 		$el->ext['mindesc'] = $ext['mindesc'];
+		$el->ext['depends'] = $ext['depends'];
 		
 		return $el;
 	}
@@ -212,7 +233,8 @@ class ModsCatalogManager extends CatalogModuleManager {
 		$cfg->extFields->Add($optionsBase->GetByName("version"));
 		$cfg->extFields->Add($optionsBase->GetByName("compat"));
 		$cfg->extFields->Add($optionsBase->GetByName("distrib"));
-	
+		$cfg->extFields->Add($optionsBase->GetByName("depends"));
+		
 		return $this->ElementList($cfg);
 	}
 	
@@ -247,20 +269,74 @@ class ModsCatalogManager extends CatalogModuleManager {
 		$this->_cacheDownList = $list;
 		return $list;
 	}
+	
+	private $_cacheElementListBuild;
+	
+	/**
+	 * @return ModsElementList
+	 */
+	public function ElementListForBuild(){
+		if (!empty($this->_cacheElementListBuild)){
+			return $this->_cacheElementListBuild;
+		}
+		
+		$this->_cacheElementListBuild = $this->ModuleList();
+		
+		return $this->_cacheElementListBuild;
+	}
+	
+	private $_cacheElementFileListBuild;
+	
+	/**
+	 * @return CatalogFileList
+	 */
+	public function ElementOptionFileListForBuild(){
+		if (!empty($this->_cacheElementFileListBuild)){
+			return $this->_cacheElementFileListBuild;
+		}
+		$elList = $this->ElementListForBuild();
+		$files = $this->ElementOptionFileList($elList);
+		$this->_cacheElementFileListBuild = $files;
+		
+		return $files;
+	}
+	
+	/**
+	 * Сформировать список всех зависимых модулей от модуля $el (рекурсивно)
+	 * 
+	 * @param ModsElement $el
+	 * @param array $result
+	 */
+	public function ElementFullDependList(ModsElement $el, &$result){
+		
+		$elList = $this->ElementListForBuild();
+		
+		$aDepends = explode(",", $el->ext['depends']);
+		for ($i=0;$i<count($aDepends);$i++){
+			$nm = trim($aDepends[$i]);
+			if ($result[$nm]){ continue; }
+			$result[$nm] = true;
+			$dEl = $elList->GetByName($nm);
+			$this->ElementFullDependList($dEl, $result);
+		}
+	}
 
 	/**
 	 * Получить собранный для скачивания файл элемента каталога
 	 * 
 	 * @param string $name Имя элемента
-	 * @return ModsDownloadInfo
+	 * @return string
 	 */
 	public function ElementBuildDownloadFile($name){
-		$el = $this->Module($name);
+		$elList = $this->ElementListForBuild();
+		if (empty($elList)){ return null; }
+		
+		$el = $elList->GetByName($name);
 		if (empty($el)){ return null; }
 		
 		$elTypeList = $this->ElementTypeList();
 		$elType = $elTypeList->Get($el->elTypeId);
-		$files = $this->ElementOptionFileList($el);
+		$files = $this->ElementOptionFileListForBuild();
 		
 		$aTmp = explode(":", $el->ext['distrib']);
 		$file = $files->Get($aTmp[0]);
@@ -373,6 +449,13 @@ class ModsCatalogManager extends CatalogModuleManager {
 		if (file_exists($outFile)){
 			return $outFile;
 		}
+		
+		// включить зависимые модули в сборку
+		if ($bldStruct['depends']){
+			$depends = array();
+			$this->ElementFullDependList($el, $depends);
+		}
+		
 		$zip = new ZipArchive();
 		
 		if ($zip->open($outFile, ZipArchive::CREATE)){
