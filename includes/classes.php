@@ -144,6 +144,24 @@ class ModsDownloadInfoList extends AbricosList {
 	}
 }
 
+class ModsBuildInfo {
+	
+	/**
+	 * @var ModsElement
+	 */
+	public $element;
+	
+	public $cachePath = '';
+	public $origFile = '';
+	public $srcPath = '';
+	public $changelogFile = '';
+	public $outFile = '';
+	
+	public function __construct(ModsElement $el){
+		$this->element = $el;
+	}
+}
+
 class ModsCatalogManager extends CatalogModuleManager {
 	
 	/**
@@ -314,9 +332,12 @@ class ModsCatalogManager extends CatalogModuleManager {
 		$aDepends = explode(",", $el->ext['depends']);
 		for ($i=0;$i<count($aDepends);$i++){
 			$nm = trim($aDepends[$i]);
-			if ($result[$nm]){ continue; }
+			if (empty($nm) || $result[$nm]){ continue; }
 			$result[$nm] = true;
 			$dEl = $elList->GetByName($nm);
+			if ( empty($dEl)){
+				print_r($nm);
+			}
 			$this->ElementFullDependList($dEl, $result);
 		}
 	}
@@ -325,7 +346,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 	 * Получить собранный для скачивания файл элемента каталога
 	 * 
 	 * @param string $name Имя элемента
-	 * @return string
+	 * @return ModsBuildInfo
 	 */
 	public function ElementBuildDownloadFile($name){
 		$elList = $this->ElementListForBuild();
@@ -344,12 +365,15 @@ class ModsCatalogManager extends CatalogModuleManager {
 			return null;
 		}
 		
+		$build = new ModsBuildInfo($el);
+		
 		$version = $el->ext['version'];
 		if (empty($version)){
 			$version = $file->id;
 		}
 		
 		$cachePath = CWD."/cache/mods/".$el->name."/".$version."/";
+		$build->cachePath = $cachePath;
 		
 		if (!is_dir($cachePath)){
 			if (!@mkdir($cachePath, 0777, true)){
@@ -370,25 +394,26 @@ class ModsCatalogManager extends CatalogModuleManager {
 				return null;
 			};
 		}
+		$build->origFile = $origFile;
 		
 		// создать папку исходников
-		$srcPath = $cachePath."src/";
+		$build->srcPath = $srcPath = $cachePath."src/";
+		
 		if (is_dir($srcPath)){
-			@rmdir($srcPath);
+			// DEBUG
+			// @rmdir($srcPath);
 		}
 		if (!is_dir($srcPath)){
-			
-			if (!is_dir($srcPath)){
-				if (!@mkdir($srcPath, 0777, true)){
-					return $origFile;
-				}
+			if (!@mkdir($srcPath, 0777, true)){
+				return $build;
 			}
 		}
+		
 		// извлечь исходник
 		if (count(glob($srcPath."*")) == 0){
 			@($zip = new ZipArchive());
 			if (empty($zip)){
-				return $origFile;
+				return $build;
 			}
 				
 			if ($zip->open($origFile) === true){
@@ -399,7 +424,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 		
 		$bldStructs = ModsConfig::$instance->buildStructure;
 		if (empty($bldStructs) || empty($bldStructs[$elType->name])){
-			return $origFile;
+			return $build;
 		}
 		
 		$bldStruct = $bldStructs[$elType->name];
@@ -411,7 +436,8 @@ class ModsCatalogManager extends CatalogModuleManager {
 		// сохранить changelog, если описана структура в конфиге
 		if (!empty($bldStruct['changelog'])){
 			$chlogFile = $subDir.$bldStruct['changelog'];
-			@unlink($chlogFile);
+			// DEBUG
+			// @unlink($chlogFile);
 			if (!file_exists($chlogFile) && ($handle = fopen($chlogFile, 'w'))){
 				
 				$chLogList = $this->ElementChangeLogListByName($el->name, "version");
@@ -442,18 +468,37 @@ class ModsCatalogManager extends CatalogModuleManager {
 				fwrite($handle, $lstChLog);
 				fclose($handle);
 			}
+			$build->changelogFile = $chlogFile;
 		}
 		
 		// создать собранный архив для скачивания
 		$outFile = $cachePath."out.zip";
 		if (file_exists($outFile)){
-			return $outFile;
+			$build->outFile = $outFile;
+			return $build;
 		}
 		
 		// включить зависимые модули в сборку
 		if ($bldStruct['depends']){
 			$depends = array();
 			$this->ElementFullDependList($el, $depends);
+			
+			// print_r("depends=");
+			// print_r($depends);
+			foreach ($depends as $sDName => $val){
+				if ($sDName == $el->name){ continue; }
+				$dEl = $elList->GetByName($sDName);
+				if (empty($dEl)){ continue; }
+				
+				$dBuild = $this->ElementBuildDownloadFile($dEl->name);
+				if (empty($dBuild) || empty($dBuild->outFile)){ continue; }
+				
+				$cpSrcPath = $build->srcPath;
+				if ($dEl->elTypeId !== $el->elTypeId){
+					$cpSrcPath .= $bldStruct['builddir'];
+				}
+				$this->CopyDir($dBuild->srcPath, $cpSrcPath);
+			}
 		}
 		
 		$zip = new ZipArchive();
@@ -468,9 +513,11 @@ class ModsCatalogManager extends CatalogModuleManager {
 			}
 			$zip->close();
 		}else{
-			return $origFile;
+			return $build;
 		}
-		return $outFile;
+		
+		$build->outFile = $outFile;
+		return $build;
 	}
 	
 	public function ReadDir($dir, &$result){
@@ -485,6 +532,42 @@ class ModsCatalogManager extends CatalogModuleManager {
 			}else{
 				array_push($result, str_replace("\\", "/", $file));
 			}
+		}
+	}
+	
+	public function NormalizePath($path){
+		$path = str_replace("\\", "/", $path);
+		$path = preg_replace('/\/+/', '/', $path);
+		return $path;
+	}
+	
+	
+	public function CopyDir($srcdir, $dstdir){
+		$srcdir = $this->NormalizePath($srcdir);
+		$dstdir = $this->NormalizePath($dstdir);
+		
+		if (is_dir($srcdir)){
+			@mkdir($dstdir, 0777, true);
+			
+			$dir = dir($srcdir);
+			
+			while (false !== ($entry = $dir->read())) {
+				if ($entry == "." || $entry == ".." || empty($entry)){
+					continue;
+				}
+				$srcSub = $srcdir."/".$entry;
+				$dstSub = $dstdir."/".$entry;
+				
+				if (is_dir($srcSub)){
+					$this->CopyDir($srcSub, $dstSub);
+				}else{
+					if (file_exists($dstSub)){ continue; }
+					@copy($srcSub, $dstSub);
+				}
+			}
+		}else{
+			if (file_exists($dstdir)){ return; }
+			@copy($srcdir, $dstdir);
 		}
 	}
 	

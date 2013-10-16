@@ -16,9 +16,9 @@ $adr = Abricos::$adress;
 $a = explode("-", $adr->dir[2]);
 $modName = $a[0];
 
-$file = $cMan->ElementBuildDownloadFile($modName);
+$build = $cMan->ElementBuildDownloadFile($modName);
 
-if (empty($file)){
+if (empty($build)){
 	$brick->content = Brick::ReplaceVarByData($brick->content, array(
 		"file" => $adr->dir[2]
 	));
@@ -30,7 +30,11 @@ $cMan->ElementDownloadCounterUpdate($modName);
 header('Content-type: application/zip; name='.$adr->dir[2]);
 
 //отдаём файл архива
-echo file_get_contents($file);
+if (empty($build->outFile)){
+	echo file_get_contents($build->origFile);
+}else{
+	echo file_get_contents($build->outFile);
+}
 exit;
 
 ?>
