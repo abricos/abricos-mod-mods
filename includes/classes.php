@@ -161,9 +161,8 @@ class ModsCatalogManager extends CatalogModuleManager {
 		
 		$cachePath = CWD."/cache/mods/".$el->name."/".$version."/";
 		
-		$tmpPath = $cachePath."tmp/";
-		if (!is_dir($tmpPath)){
-			if (!@mkdir($tmpPath, 0777, true)){
+		if (!is_dir($cachePath)){
+			if (!@mkdir($cachePath, 0777, true)){
 				return null;
 			}
 		}
@@ -252,6 +251,42 @@ class ModsCatalogManager extends CatalogModuleManager {
 				
 				fwrite($handle, $lstChLog);
 				fclose($handle);
+			}
+		}
+		
+		// создать собранный архив для скачивания
+		$outFile = $cachePath."out.zip";
+		if (file_exists($outFile)){
+			return $outFile;
+		}
+		$zip = new ZipArchive();
+		
+		if ($zip->open($outFile, ZipArchive::CREATE)){
+			$srcPath = str_replace("\\", "/", realpath($srcPath)."/");
+			$files = array();
+			$this->ReadDir($srcPath, $files);
+			foreach($files as $file){
+				$fileInZip = str_replace($srcPath, "", $file);
+				$zip->addFile($file, $fileInZip);
+			}
+			$zip->close();
+		}else{
+			return $origFile;
+		}
+		return $outFile;
+	}
+	
+	public function ReadDir($dir, &$result){
+		$dir = realpath($dir);
+		$files = glob($dir.'/*');
+		if (count($files) == 0){ return; }
+		
+		foreach($files as $file){
+			if (is_dir($file)){
+				// array_push($result, $file);
+				$this->ReadDir($file, $result);
+			}else{
+				array_push($result, str_replace("\\", "/", $file));
 			}
 		}
 	}
