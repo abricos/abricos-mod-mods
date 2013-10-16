@@ -82,11 +82,22 @@ if ($updateManager->isUpdate('0.1.3')){
 		"tl" => "Утилита",
 		"tls"=> "Утилиты"
 	));
-	$cManager->ElementOptionSave(0, array(
-		"nm" => "buildpath", "tl" => "Путь сборки",
-		"tp" => Catalog::TP_STRING, "ord" => $ord--,
-		"sz" => 150
-	));
+	
+	$db->query_write("
+		CREATE TABLE IF NOT EXISTS ".$pfx."mods_download (
+			`elementname` varchar(25) NOT NULL DEFAULT '' COMMENT 'Имя элемента каталога',
+			`counter` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Счетчик',
+
+			`version` varchar(25) NOT NULL DEFAULT '' COMMENT 'Текущая версия',
+			`origfile` varchar(8) NOT NULL DEFAULT '' COMMENT 'Идентификатор исходного файла',
+			
+			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
+			`upddate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата обновления',
+	
+			UNIQUE KEY (`elementname`)
+		)".$charset
+	);
+	
 	
 }
 ?>

@@ -9,7 +9,7 @@
  */
 
 /**
- * Интернет-магазин
+ * Каталог модулей
  */
 class ModsModule extends Ab_Module {
 	
@@ -25,7 +25,7 @@ class ModsModule extends Ab_Module {
 	private $_manager = null;
 	
 	public function ModsModule(){
-		$this->version = "0.1.2";
+		$this->version = "0.1.3";
 		$this->name = "mods";
 		$this->takelink = "mods";
 		ModsModule::$instance = $this;

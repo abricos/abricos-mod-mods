@@ -6,7 +6,7 @@
  * @author Alexander Kuzmin <roosit@abricos.org>
  */
 
-// require_once 'dbquery.php';
+require_once 'dbquery.php';
 
 class ModsConfig {
 	
@@ -57,11 +57,70 @@ class ModsElement extends CatalogElement {
 	public function URI(){
 		return "/mods/".$this->name."/";
 	}
+	
+	public function DownloadURI(CatalogFile $file){
+		$file->name = $this->name;
+		$version = "";
+		if (!empty($this->ext['version'])){
+			$file->name .= "-".$this->ext['version'];
+			$version = $this->ext['version'];
+		}
+		$file->name .= ".zip";
+		
+		$downloadURI = $file->URL();
+		if (ModsConfig::$instance->buildDownload){
+			$downloadURI = "/mods/download/".$this->name."-";
+			if (empty($version)){
+				$downloadURI .= $file->id;
+			}else{
+				$downloadURI .= $version;
+			}
+			$downloadURI .= ".zip";
+		}
+		return $downloadURI;
+	}
 }
 
 class ModsElementList extends CatalogElementList {
+	
+	/**
+	 * @return ModsElement
+	 */
+	public function GetByIndex($i){
+		return parent::GetByIndex($i);
+	}
+	
 	public function ToAJAX(){
 		return parent::ToAJAX(ModsCatalogManager::$instance);
+	}
+}
+
+class ModsDownloadInfo extends AbricosItem {
+	
+	public $counter;
+	public $version;
+
+	public function __construct($d){
+		$this->id =  strval($d['nm']);
+		$this->counter = intval($d['cnt']);
+		$this->version = intval($d['vs']);
+	}
+}
+
+class ModsDownloadInfoList extends AbricosList {
+	
+	/**
+	 * @return ModsDownloadInfo
+	 */
+	public function GetByIndex($i){
+		return parent::GetByIndex($i);
+	}
+	
+	/**
+	 * @return ModsDownloadInfo
+	 */
+	public function Get($name){
+		return parent::Get($name);
 	}
 }
 
@@ -133,12 +192,67 @@ class ModsCatalogManager extends CatalogModuleManager {
 		
 		return $el;
 	}
+	
+	/**
+	 * @param mixed $cfg
+	 * @return ModsElementList
+	 */
+	public function ModuleList($cfg = null){
+		if (empty($cfg)){
+			$cfg = new CatalogElementListConfig();
+			$cfg->catids = array(0);
+		}
+	
+		$optionsBase = $this->ElementTypeList()->Get(0)->options;
+	
+		// $ordOpt = $cfg->orders->AddByOption($optionsBase->GetByName("price"));
+		// $ordOpt->zeroDesc = true;
+	
+		$cfg->extFields->Add($optionsBase->GetByName("mindesc"));
+		$cfg->extFields->Add($optionsBase->GetByName("version"));
+		$cfg->extFields->Add($optionsBase->GetByName("compat"));
+		$cfg->extFields->Add($optionsBase->GetByName("distrib"));
+	
+		return $this->ElementList($cfg);
+	}
+	
+	public function ElementDownloadCounterUpdate($name){
+		if (!$this->IsViewRole()){ return null; }
+		
+		ModsQuery::ElementDownloadCounterUpdate($this->db, $name);
+	}
+	
+	private $_cacheDownList;
+	
+	/**
+	 * Информация загрузки по элементу каталога
+	 * 
+	 * @param string $name
+	 * @return ModsDownloadInfoList
+	 */
+	public function ElementDownloadInfoList($clearCache = false){
+		if (!$this->IsViewRole()){ return null; }
+		
+		if ($clearCache){
+			$this->_cacheDownList = null;
+		}
+		if (!empty($this->_cacheDownList)){ return $this->_cacheDownList; }
+		
+		$list = new ModsDownloadInfoList();
+		$rows = ModsQuery::ElementDownloadInfoList($this->db);
+		while (($d = $this->db->fetch_array($rows))){
+			$list->Add(new ModsDownloadInfo($d));
+		}
+		
+		$this->_cacheDownList = $list;
+		return $list;
+	}
 
 	/**
 	 * Получить собранный для скачивания файл элемента каталога
 	 * 
 	 * @param string $name Имя элемента
-	 * @return string|null
+	 * @return ModsDownloadInfo
 	 */
 	public function ElementBuildDownloadFile($name){
 		$el = $this->Module($name);
@@ -289,29 +403,6 @@ class ModsCatalogManager extends CatalogModuleManager {
 				array_push($result, str_replace("\\", "/", $file));
 			}
 		}
-	}
-	
-	/**
-	 * @param mixed $cfg
-	 * @return ModsElementList
-	 */
-	public function ModuleList($cfg = null){
-		if (empty($cfg)){
-			$cfg = new CatalogElementListConfig();
-			$cfg->catids = array(0);
-		}
-
-		$optionsBase = $this->ElementTypeList()->Get(0)->options;
-		
-		// $ordOpt = $cfg->orders->AddByOption($optionsBase->GetByName("price"));
-		// $ordOpt->zeroDesc = true;
-		
-		$cfg->extFields->Add($optionsBase->GetByName("mindesc"));
-		$cfg->extFields->Add($optionsBase->GetByName("version"));
-		$cfg->extFields->Add($optionsBase->GetByName("compat"));
-		$cfg->extFields->Add($optionsBase->GetByName("distrib"));
-		
-		return $this->ElementList($cfg);
 	}
 	
 	public function OnElementAppendByOperator($elementid){

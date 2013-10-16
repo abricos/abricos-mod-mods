@@ -25,6 +25,8 @@ if (empty($file)){
 	return;
 }
 
+$cMan->ElementDownloadCounterUpdate($modName);
+
 header('Content-type: application/zip; name='.$adr->dir[2]);
 
 //отдаём файл архива

@@ -47,35 +47,20 @@ $image = Brick::ReplaceVarByData($image, array(
 ));
 
 
-$dl = $el->dateline; $upd = $el->upddate;
+$dl = $el->dateline;
 $user = $uList->Get($el->userid);
 
 /* * * * * * * Скачать * * * * * */
 $aTmp = explode(":", $el->ext['distrib']);
 $file = $files->Get($aTmp[0]);
-$downloadURI = "#";
+$downloadURI = !empty($file) ? $el->DownloadURI($file) : "#";
 
-if (!empty($file)){
-	$upd = $file->dateline;
-	$file->name = $el->name;
-	$version = "";
-	if (!empty($el->ext['version'])){
-		$file->name .= "-".$el->ext['version'];
-		$version = $el->ext['version'];
-	}
-	$file->name .= ".zip";
-	
-	// TODO: необходимо перегрузить класс файлов для генерации ссылки скачивания
-	$downloadURI = $file->URL();
-	if (ModsConfig::$instance->buildDownload){
-		$downloadURI = "/mods/download/".$el->name."-";
-		if (empty($version)){
-			$downloadURI .= $file->id;
-		}else{
-			$downloadURI .= $version;
-		}
-		$downloadURI .= ".zip";
-	}
+$downloadCount = !empty($file) ? $file->counter : 0;
+$downList = $cMan->ElementDownloadInfoList();
+$downInfo = $downList->Get($el->name);
+
+if (!empty($downInfo)){
+	$downloadCount = $downInfo->counter;
 }
 
 // --------------- Скриншоты -----------------
@@ -148,7 +133,7 @@ $brick->content = Brick::ReplaceVarByData($brick->content, array(
 	"dependscnt" => $sDependCount,
 	"depends" => $lstDepends,
 	"disdepends" => $disDepends,
-	"distdowncnt" => !empty($file) ? $file->counter : 0,
+	"distdowncnt" => $downloadCount,
 	"downlink" => $downloadURI,
 	"compat" => $el->ext['compat'],
 	"dateline" => date("d", $dl)." ".rusMonth($dl)." ".date("Y", $dl),

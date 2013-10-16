@@ -58,9 +58,12 @@ if (empty($elList)){ $brick->content = ""; return; }
 $uList = $cMan->UserList($elList);
 $files = $cMan->ElementOptionFileList($elList);
 
+$downList = $cMan->ElementDownloadInfoList();
+
 $lst = "";
 for ($i=0;$i<$elList->Count();$i++){
 	$el = $elList->GetByIndex($i);
+	
 	
 	if (empty($el->foto)){
 		$image = $v["imgempty"];
@@ -87,6 +90,12 @@ for ($i=0;$i<$elList->Count();$i++){
 		}
 		$file->name .= ".zip";
 	}
+	$downloadCount = !empty($file) ? $file->counter : 0;
+	
+	$downInfo = $downList->Get($el->name);
+	if (!empty($downInfo)){
+		$downloadCount = $downInfo->counter;
+	}
 	
 	$elType = $elTypeList->Get($el->elTypeId);
 	
@@ -97,8 +106,8 @@ for ($i=0;$i<$elList->Count();$i++){
 		"version" => $el->ext['version'],
 		"ulink" => $user->URL(),
 		"uname" => $user->GetUserName(),
-		"distdowncnt" => !empty($file) ? $file->counter : 0,
-		"downlink" => !empty($file) ? $file->URL() : "#",
+		"distdowncnt" => $downloadCount,
+		"downlink" => !empty($file) ? $el->DownloadURI($file) : "#",
 		"compat" => $el->ext['compat'],
 		"dateline" => date("d", $dl)." ".rusMonth($dl)." ".date("Y", $dl),
 		"upddate" => date("d", $upd)." ".rusMonth($upd)." ".date("Y", $upd),
