@@ -437,20 +437,29 @@ class ModsCatalogManager extends CatalogModuleManager {
 		$atDirs = glob($cachePath.$buildDirName."*");
 		$buildDirName .= "-".$key;
 		
-		for($i=0;$i<count($atDirs);$i++){
-			$pi = pathinfo($atDirs[$i]);
-			
-			if ($pi['basename'] == $buildDirName){ continue; }
-			$this->RemoveDir($atDirs[$i]);
+		if (is_array($atDirs)){
+			for($i=0;$i<count($atDirs);$i++){
+				$pi = pathinfo($atDirs[$i]);
+					
+				if ($pi['basename'] == $buildDirName){
+					continue;
+				}
+				$this->RemoveDir($atDirs[$i]);
+			}
 		}
 		
 		$cachePath .= $buildDirName."/";
 		
 		$build->cachePath = $cachePath;
-		if (!is_dir($cachePath)){
-			if (!@mkdir($cachePath, 0777, true)){
-				return null;
-			}
+		if (!is_dir($cachePath) && !@mkdir($cachePath, 0777, true)){
+			return null;
+		}
+		
+		// собранный архив для загрузки
+		$outFile = $cachePath."out.zip";
+		if (file_exists($outFile)){
+			$build->outFile = $outFile;
+			return $build;
 		}
 		
 		$fmMod = Abricos::GetModule('filemanager');
@@ -481,14 +490,12 @@ class ModsCatalogManager extends CatalogModuleManager {
 		}
 		$build->srcPath = $srcPath;
 		
-		if (!is_dir($srcPath)){
-			if (!@mkdir($srcPath, 0777, true)){
-				return $build;
-			}
+		if (!is_dir($srcPath) && !@mkdir($srcPath, 0777, true)){
+			return $build;
 		}
 		
 		// извлечь исходник
-		if (count(glob($srcPath."*")) == 0){
+		if ($this->DirIsEmpty($srcPath)){
 			@($zip = new ZipArchive());
 			if (empty($zip)){
 				return $build;
@@ -509,10 +516,14 @@ class ModsCatalogManager extends CatalogModuleManager {
 			$subDir .= str_replace("{v#name}", $el->name, $bldStruct['subdir'])."/";
 		}
 		
+		if (!is_dir($subDir) && !@mkdir($subDir, 0777, true)){
+			return $build;
+		}
+		
 		// сохранить changelog, если описана структура в конфиге
 		if (!empty($bldStruct['changelog'])){
 			$chlogFile = $subDir.$bldStruct['changelog'];
-			if (!file_exists($chlogFile) && ($handle = fopen($chlogFile, 'w'))){
+			if (!file_exists($chlogFile) && ($handle = fopen($chlogFile, 'wb'))){
 				
 				$chLogList = $this->ElementChangeLogListByName($el->name, "version");
 				$lstChLog = "";
@@ -543,13 +554,6 @@ class ModsCatalogManager extends CatalogModuleManager {
 			$build->changelogFile = $chlogFile;
 		}
 		
-		// создать собранный архив для скачивания
-		$outFile = $cachePath."out.zip";
-		if (file_exists($outFile)){
-			$build->outFile = $outFile;
-			return $build;
-		}
-		
 		// включить зависимые модули в сборку
 		if ($bldStruct['depends'] || $withDepends){
 			$depends = array();
@@ -562,7 +566,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 				$dBuild = $this->ElementBuildDownloadFileMethod($dEl->name, true);
 				if (empty($dBuild) || empty($dBuild->outFile)){ continue; }
 				
-				$this->CopyDir($dBuild->cachePath."src/", $cachePath."src/");
+				$this->DirCopy($dBuild->cachePath."src/", $cachePath."src/");
 			}
 		}
 		
@@ -587,12 +591,13 @@ class ModsCatalogManager extends CatalogModuleManager {
 	
 	public function ReadDir($dir, &$result){
 		$dir = realpath($dir);
+		if ($this->DirIsEmpty($dir)){ return; }
+		
 		$files = glob($dir.'/*');
-		if (count($files) == 0){ return; }
+		if (!is_array($files)){ return; }
 		
 		foreach($files as $file){
 			if (is_dir($file)){
-				// array_push($result, $file);
 				$this->ReadDir($file, $result);
 			}else{
 				array_push($result, str_replace("\\", "/", $file));
@@ -605,7 +610,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 	 * Проверка, чтобы случайно что нить не грохнуть или создать за ее пределами.
 	 * @param string $dir
 	 */
-	public function CheckDirInCache($dir){
+	public function DirCheckInCache($dir){
 		$dir = $this->NormalizePath($dir."/");
 		$cachePath = $this->NormalizePath(CWD."/cache/mods/");
 		if (strpos($dir, $cachePath) === false){
@@ -634,7 +639,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 		@rmdir($rmdir);
 	}
 	public function RemoveDir($dir){
-		if (!$this->CheckDirInCache($dir)){ return false; }
+		if (!$this->DirCheckInCache($dir)){ return false; }
 		$this->RemoveDirMethod($dir);
 	}
 	
@@ -644,8 +649,21 @@ class ModsCatalogManager extends CatalogModuleManager {
 		return $path;
 	}
 	
+	public function DirIsEmpty($sDir){
+		$sDir = $this->NormalizePath($sDir."/");
+		
+		$dir = dir($sDir);
+			
+		while (false !== ($entry = $dir->read())) {
+			if ($entry == "." || $entry == ".." || empty($entry)){
+				continue;
+			}
+			return false;
+		}
+		return true;
+	}
 	
-	public function CopyDir($srcdir, $dstdir){
+	public function DirCopy($srcdir, $dstdir){
 		$srcdir = $this->NormalizePath($srcdir);
 		$dstdir = $this->NormalizePath($dstdir);
 		
@@ -662,7 +680,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 				$dstSub = $dstdir."/".$entry;
 				
 				if (is_dir($srcSub)){
-					$this->CopyDir($srcSub, $dstSub);
+					$this->DirCopy($srcSub, $dstSub);
 				}else{
 					if (file_exists($dstSub)){ continue; }
 					@copy($srcSub, $dstSub);
