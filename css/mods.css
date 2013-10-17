@@ -60,6 +60,17 @@
 .mod-mods .moditem .feature .download a:HOVER {
 	background-color: #5784bf;
 }
+.mod-mods .moditem .feature .download a.deps {
+	background: linear-gradient(#C3C6D5, #CFD2DE) repeat scroll 0 0 #489615;
+}
+.mod-mods .moditem .feature .download a.deps:HOVER {
+	background: linear-gradient(#9399B4, #7B83A3) repeat scroll 0 0 #489615;
+}
+.mod-mods .modview .moditem .feature .download a {
+	float: left;
+	margin-right: 10px;
+}
+
 .mod-mods .moditem .feature .sep {
 	float: left;
 	margin-right: 5px;

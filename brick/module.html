@@ -46,6 +46,10 @@
 	</dl>
 [/bkvar]
 
+[bkvar=downdepends]
+	<a href="{v#downlink}" class="deps" title="Загрузить, включая в архив все зависимости">Скачать полностью</a>
+[/bkvar]
+
 [bkvar=metatitle]{v#eltypetitle} «{v#title}» / Каталог расширений / {v#sitename}[/bkvar]
 [*]-->
 <div class="modview">
@@ -77,6 +81,8 @@
 						<dt></dt>
 						<dd>
 							<a href="{v#downlink}">Скачать</a>
+							{v#downdepends}
+							<div class="clear"></div>
 						</dd>
 					</dl>
 					<div class="clear"></div>

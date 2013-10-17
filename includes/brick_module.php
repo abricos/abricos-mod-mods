@@ -19,7 +19,6 @@ Abricos::GetModule('filemanager')->EnableThumbSize(array(
 	array("w" => $imgWidth, "h" => $imgHeight)
 ));
 
-
 $adr = Abricos::$adress;
 $modName = $adr->dir[1];
 
@@ -27,8 +26,14 @@ $el = $cMan->Module($modName);
 
 if (empty($el)){ $brick->content = ""; return; }
 
+
 $elTypeList = $cMan->ElementTypeList();
 $elType = $elTypeList->Get($el->elTypeId);
+
+$cfgBS = null;
+if (ModsConfig::$instance->buildStructure){
+	$cfgBS = ModsConfig::$instance->buildStructure[$elType->name];
+}
 
 $uList = $cMan->UserList($el);
 $files = $cMan->ElementOptionFileList($el);
@@ -118,7 +123,16 @@ for ($i=0;$i<$chLogList->Count(); $i++){
 		'chlg' => $log
 	));
 }
-		
+
+// ---------- Download with Depends -----------
+$downdepends = "";
+if (!empty($cfgBS) && $cfgBS['optiondepends'] && !empty($file)){
+	$downdepends = Brick::ReplaceVarByData($v['downdepends'], array(
+		"downlink" => $el->DownloadURI($file, true)
+	));
+}
+// $elType->name
+
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
 	"image" => $image,
 	"eltypetitle" => $elType->title,
@@ -135,6 +149,7 @@ $brick->content = Brick::ReplaceVarByData($brick->content, array(
 	"disdepends" => $disDepends,
 	"distdowncnt" => $downloadCount,
 	"downlink" => $downloadURI,
+	"downdepends" => $downdepends,
 	"compat" => $el->ext['compat'],
 	"dateline" => date("d", $dl)." ".rusMonth($dl)." ".date("Y", $dl),
 	"upddate" => date("d", $el->dateline)." ".rusMonth($el->dateline)." ".date("Y", $el->dateline),

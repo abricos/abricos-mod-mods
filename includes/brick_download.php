@@ -16,7 +16,25 @@ $adr = Abricos::$adress;
 $a = explode("-", $adr->dir[2]);
 $modName = $a[0];
 
-$build = $cMan->ElementBuildDownloadFile($modName);
+$build = null;
+
+$withDepends = Abricos::CleanGPC('g', 'depends', TYPE_STR) == 'true';
+$elList = $cMan->ElementListForBuild();
+$el = $elList->GetByName($modName);
+$elTypeList = $cMan->ElementTypeList();
+$elType = $elTypeList->Get($el->elTypeId);
+
+$cfg = ModsConfig::$instance;
+$cfgBS = $cfg->buildStructure[$elType->name];
+
+if (!empty($el) && $cfg->buildStructure && !empty($cfgBS)){
+	
+	if ($withDepends && !$cfgBS['optiondepends']){
+		$withDepends = false;
+	}
+	
+	$build = $cMan->ElementBuildDownloadFile($modName, $withDepends);
+}
 
 if (empty($build)){
 	$brick->content = Brick::ReplaceVarByData($brick->content, array(
