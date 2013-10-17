@@ -339,13 +339,51 @@ class ModsCatalogManager extends CatalogModuleManager {
 			if (empty($nm) || $result[$nm]){ continue; }
 			$result[$nm] = true;
 			$dEl = $elList->GetByName($nm);
-			if ( empty($dEl)){
-				print_r($nm);
+			if (!empty($dEl)){
+				$this->ElementFullDependList($dEl, $result);
 			}
-			$this->ElementFullDependList($dEl, $result);
 		}
 	}
+	
+	private $_cacheSafeRecursKey;
+	private $_cacheElementBuildKey = array();
+	
+	public function ElementBuildKey(ModsElement $el, $withDepends){
+		
+		if (!empty($this->_cacheElementBuildKey[$el->id])){
+			return $this->_cacheElementBuildKey[$el->id];
+		}
+		
+		if ($this->_cacheSafeRecursKey[$el->id]){ return ""; }
+		$this->_cacheSafeRecursKey[$el->id] = true;
+		
+		$elList = $this->ElementListForBuild();
+		$files = $this->ElementOptionFileListForBuild();
+		
+		$aTmp = explode(":", $el->ext['distrib']);
+		$file = $files->Get($aTmp[0]);
+		if (empty($file)){ return ""; }
+		
+		$key = $file->id.$el->ext['version'];
 
+		if ($withDepends){
+			$depends = array();
+			$this->ElementFullDependList($el, $depends);
+			
+			foreach ($depends as $sDName => $val){
+				if ($sDName == $el->name){ continue; }
+				$dEl = $elList->GetByName($sDName);
+				$key .= $this->ElementBuildKey($dEl, $withDepends);
+			}
+		}
+		
+		$key = md5($key);
+		
+		$this->_cacheElementBuildKey[$el->id] = $key;
+		
+		return $key;
+	}
+	
 	/**
 	 * Получить собранный для скачивания файл элемента каталога
 	 * 
@@ -353,6 +391,19 @@ class ModsCatalogManager extends CatalogModuleManager {
 	 * @return ModsBuildInfo
 	 */
 	public function ElementBuildDownloadFile($name, $withDepends = false){
+		// защита от бесконечной рекурсии
+		$this->_cacheSafeRecursBuild = array();
+		$this->_cacheSafeRecursKey = array();
+		
+		return $this->ElementBuildDownloadFileMethod($name, $withDepends);
+	}
+	private $_cacheSafeRecursBuild;
+	private $_cacheElementBuild = array();
+	protected function ElementBuildDownloadFileMethod($name, $withDepends = false){
+		
+		if ($this->_cacheSafeRecursBuild[$name]){ return null; }
+		$this->_cacheSafeRecursBuild[$name] = true;
+		
 		$elList = $this->ElementListForBuild();
 		if (empty($elList)){ return null; }
 		
@@ -369,18 +420,31 @@ class ModsCatalogManager extends CatalogModuleManager {
 			return null;
 		}
 		
+		if (!empty($this->_cacheElementBuild[$name])){
+			return $this->_cacheElementBuild[$name];
+		}
+		
 		$build = new ModsBuildInfo($el);
+		$this->_cacheElementBuild[$name] = $build;
+
+		// сгенерировать уникальный ключ сборки
+		$key = $this->ElementBuildKey($el, $withDepends);
 		
-		$version = $el->ext['version'];
-		if (empty($version)){
-			$version = $file->id;
+		$cachePath = CWD."/cache/mods/".$el->name."/";
+		$buildDirName = "build".($withDepends ? "-deps" : "-one");
+		
+		// проверить предыдущие сборки, если есть - удалить их
+		$atDirs = glob($cachePath.$buildDirName."*");
+		$buildDirName .= "-".$key;
+		
+		for($i=0;$i<count($atDirs);$i++){
+			$pi = pathinfo($atDirs[$i]);
+			
+			if ($pi['basename'] == $buildDirName){ continue; }
+			$this->RemoveDir($atDirs[$i]);
 		}
 		
-		$cachePath = CWD."/cache/mods/".$el->name."/".$version."-".$file->id;
-		if ($withDepends){
-			$cachePath .= "-deps";
-		}
-		$cachePath .= "/";
+		$cachePath .= $buildDirName."/";
 		
 		$build->cachePath = $cachePath;
 		if (!is_dir($cachePath)){
@@ -490,13 +554,12 @@ class ModsCatalogManager extends CatalogModuleManager {
 		if ($bldStruct['depends'] || $withDepends){
 			$depends = array();
 			$this->ElementFullDependList($el, $depends);
-			
 			foreach ($depends as $sDName => $val){
 				if ($sDName == $el->name){ continue; }
 				$dEl = $elList->GetByName($sDName);
 				if (empty($dEl)){ continue; }
 				
-				$dBuild = $this->ElementBuildDownloadFile($dEl->name, true);
+				$dBuild = $this->ElementBuildDownloadFileMethod($dEl->name, true);
 				if (empty($dBuild) || empty($dBuild->outFile)){ continue; }
 				
 				$this->CopyDir($dBuild->cachePath."src/", $cachePath."src/");
@@ -535,6 +598,44 @@ class ModsCatalogManager extends CatalogModuleManager {
 				array_push($result, str_replace("\\", "/", $file));
 			}
 		}
+	}
+	
+	/**
+	 * Находится ли папка в папке кеш?
+	 * Проверка, чтобы случайно что нить не грохнуть или создать за ее пределами.
+	 * @param string $dir
+	 */
+	public function CheckDirInCache($dir){
+		$dir = $this->NormalizePath($dir."/");
+		$cachePath = $this->NormalizePath(CWD."/cache/mods/");
+		if (strpos($dir, $cachePath) === false){
+			return false;
+		}
+		return true;
+	}
+	
+	private function RemoveDirMethod($rmdir){
+		$dir = $this->NormalizePath($rmdir."/");
+		$dir = dir($rmdir);
+		
+		while (false !== ($entry = $dir->read())) { // удаление файлов
+			if ($entry == "." || $entry == ".." || empty($entry)){ continue; }
+			$obj = $rmdir."/".$entry;
+			if (is_dir($obj)){ continue; }
+			@unlink($obj);
+		}
+		while (false !== ($entry = $dir->read())) { // удаление папок
+			if ($entry == "." || $entry == ".." || empty($entry)){ continue; }
+			$obj = $rmdir."/".$entry;
+			if (!is_dir($obj)){ continue; }
+			$this->RemoveDirMethod($obj);
+		}
+		
+		@rmdir($rmdir);
+	}
+	public function RemoveDir($dir){
+		if (!$this->CheckDirInCache($dir)){ return false; }
+		$this->RemoveDirMethod($dir);
 	}
 	
 	public function NormalizePath($path){
