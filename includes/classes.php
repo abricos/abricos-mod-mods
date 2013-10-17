@@ -78,7 +78,7 @@ class ModsElement extends CatalogElement {
 		
 		$downloadURI = $file->URL();
 		if (ModsConfig::$instance->buildDownload){
-			$downloadURI = "/mods/download/".$this->name."-";
+			$downloadURI = "/mods/".$this->name."/download/".$this->name."-";
 			if (empty($version)){
 				$downloadURI .= $file->id;
 			}else{

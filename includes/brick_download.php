@@ -14,7 +14,7 @@ $cMan = ModsModule::$instance->GetManager()->cManager;
 
 $adr = Abricos::$adress;
 $a = explode("-", $adr->dir[2]);
-$modName = $a[0];
+$modName = $adr->dir[1];
 
 $build = null;
 
@@ -38,14 +38,14 @@ if (!empty($el) && $cfg->buildStructure && !empty($cfgBS)){
 
 if (empty($build)){
 	$brick->content = Brick::ReplaceVarByData($brick->content, array(
-		"file" => $adr->dir[2]
+		"file" => $adr->dir[3]
 	));
 	return;
 }
 
 $cMan->ElementDownloadCounterUpdate($modName);
 
-header('Content-type: application/zip; name='.$adr->dir[2]);
+header('Content-type: application/zip; name='.$adr->dir[3]);
 
 //отдаём файл архива
 if (empty($build->outFile)){

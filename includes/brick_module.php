@@ -64,7 +64,7 @@ $downloadCount = !empty($file) ? $file->counter : 0;
 $downList = $cMan->ElementDownloadInfoList();
 $downInfo = $downList->Get($el->name);
 
-if (!empty($downInfo)){
+if (ModsConfig::$instance->buildDownload && !empty($downInfo)){
 	$downloadCount = $downInfo->counter;
 }
 
@@ -126,7 +126,8 @@ for ($i=0;$i<$chLogList->Count(); $i++){
 
 // ---------- Download with Depends -----------
 $downdepends = "";
-if (!empty($cfgBS) && $cfgBS['optiondepends'] && !empty($file)){
+if (ModsConfig::$instance->buildDownload && 
+		!empty($cfgBS) && $cfgBS['optiondepends'] && !empty($file)){
 	$downdepends = Brick::ReplaceVarByData($v['downdepends'], array(
 		"downlink" => $el->DownloadURI($file, true)
 	));

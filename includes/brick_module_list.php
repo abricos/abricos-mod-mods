@@ -93,7 +93,7 @@ for ($i=0;$i<$elList->Count();$i++){
 	$downloadCount = !empty($file) ? $file->counter : 0;
 	
 	$downInfo = $downList->Get($el->name);
-	if (!empty($downInfo)){
+	if (ModsConfig::$instance->buildDownload && !empty($downInfo)){
 		$downloadCount = $downInfo->counter;
 	}
 	
