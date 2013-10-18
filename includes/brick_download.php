@@ -47,12 +47,13 @@ $cMan->ElementDownloadCounterUpdate($modName);
 
 header('Content-type: application/zip; name='.$adr->dir[3]);
 
+$outFile = empty($build->outFile) ? $build->origFile : $build->outFile;
+
+header("Content-Length: " . filesize($outFile));
+
 //отдаём файл архива
-if (empty($build->outFile)){
-	echo file_get_contents($build->origFile);
-}else{
-	echo file_get_contents($build->outFile);
-}
+echo file_get_contents($outFile);
+
 exit;
 
 ?>

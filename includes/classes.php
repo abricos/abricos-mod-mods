@@ -589,18 +589,20 @@ class ModsCatalogManager extends CatalogModuleManager {
 		return $build;
 	}
 	
-	public function ReadDir($dir, &$result){
-		$dir = realpath($dir);
-		if ($this->DirIsEmpty($dir)){ return; }
+	public function ReadDir($sDir, &$result){
+		$sDir = $this->NormalizePath($sDir."/");
+		if (!is_dir($sDir)){ return; }
 		
-		$files = glob($dir.'/*');
-		if (!is_array($files)){ return; }
-		
-		foreach($files as $file){
+		$dir = dir($sDir);
+		while (false !== ($entry = $dir->read())) { // удаление файлов
+			if ($entry == "." || $entry == ".." || empty($entry)){
+				continue;
+			}
+			$file = $this->NormalizePath($sDir."/".$entry);
 			if (is_dir($file)){
 				$this->ReadDir($file, $result);
 			}else{
-				array_push($result, str_replace("\\", "/", $file));
+				array_push($result, $file);
 			}
 		}
 	}
