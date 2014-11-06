@@ -27,20 +27,20 @@ $elType = $elTypeList->Get($el->elTypeId);
 $cfg = ModsConfig::$instance;
 $cfgBS = $cfg->buildStructure[$elType->name];
 
-if (!empty($el) && $cfg->buildStructure && !empty($cfgBS)){
-	
-	if ($withDepends && !$cfgBS['optiondepends']){
-		$withDepends = false;
-	}
-	
-	$build = $cMan->ElementBuildDownloadFile($modName, $withDepends);
+if (!empty($el) && $cfg->buildStructure && !empty($cfgBS)) {
+
+    if ($withDepends && !$cfgBS['optiondepends']) {
+        $withDepends = false;
+    }
+
+    $build = $cMan->ElementBuildDownloadFile($modName, $withDepends);
 }
 
-if (empty($build)){
-	$brick->content = Brick::ReplaceVarByData($brick->content, array(
-		"file" => $adr->dir[3]
-	));
-	return;
+if (empty($build)) {
+    $brick->content = Brick::ReplaceVarByData($brick->content, array(
+        "file" => $adr->dir[3]
+    ));
+    return;
 }
 
 $cMan->ElementDownloadCounterUpdate($modName);
@@ -49,7 +49,7 @@ header('Content-type: application/zip; name='.$adr->dir[3]);
 
 $outFile = empty($build->outFile) ? $build->origFile : $build->outFile;
 
-header("Content-Length: " . filesize($outFile));
+header("Content-Length: ".filesize($outFile));
 
 //отдаём файл архива
 echo file_get_contents($outFile);

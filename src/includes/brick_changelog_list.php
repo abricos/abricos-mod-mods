@@ -75,7 +75,7 @@ if (!empty($el->detail->metaTitle) && $el->detail->metaTitle !="&nbsp;"){
 	$metaTitle = Brick::ReplaceVarByData($v['metatitle'], array(
 		"eltypetitle" => $elType->title,
 		"title" => $el->title,
-		"sitename" => Brick::$builder->phrase->Get('sys', 'site_name')
+		"sitename" => SystemModule::$instance->GetPhrases()->Get('site_name')
 	));
 	Brick::$builder->SetGlobalVar('meta_title', $metaTitle);
 }
