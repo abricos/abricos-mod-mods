@@ -159,9 +159,21 @@ class ModsManager extends Ab_ModuleManager {
             $cmItem->isSelect = true;
             $mItem->isSelect = true;
         }
-
     }
 
+    public function Bos_MenuData() {
+        $i18n = $this->module->GetI18n();
+        return array(
+            array(
+                "name" => "mods",
+                "title" => $i18n['title'],
+                "role" => ModsAction::ADMIN,
+                "icon" => "/modules/mods/images/logo-48x48.png",
+                "url" => "mods/wspace/ws",
+                "parent" => "controlPanel"
+            )
+        );
+    }
 }
 
 ?>

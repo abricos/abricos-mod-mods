@@ -6,11 +6,18 @@
 var Component = new Brick.Component();
 Component.requires = {
     mod: [
-        {name: 'catalog', files: ['lib.js']},
-        {name: '{C#MODNAME}', files: ['roles.js']}
+        {name: 'catalog', files: ['lib.js']}
     ]
 };
 Component.entryPoint = function(NS){
+
+    NS.roles = new Brick.AppRoles('{C#MODNAME}', {
+        isAdmin: 50,
+        isModerator: 45,
+        isOperator: 40,
+        isWrite: 30,
+        isView: 10
+    });
 
     var L = YAHOO.lang,
         R = NS.roles;
