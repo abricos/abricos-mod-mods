@@ -187,15 +187,14 @@ class ModsCatalogManager extends CatalogModuleManager {
 
         parent::__construct("mods");
 
-        $this->CatalogElementClass = ModsElement;
-        $this->CatalogElementListClass = ModsElementList;
+        $this->CatalogElementClass = 'ModsElement';
+        $this->CatalogElementListClass = 'ModsElementList';
 
         // разрешить изменять имя элемента
         $this->cfgElementNameChange = true;
         $this->cfgElementNameUnique = true;
         $this->cfgElementCreateBaseTypeDisable = true;
         $this->cfgVersionControl = true;
-
     }
 
     public function IsAdminRole() {

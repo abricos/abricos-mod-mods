@@ -34,7 +34,7 @@ class ModsManager extends Ab_ModuleManager {
 
         $this->cManager = new ModsCatalogManager();
 
-        $this->config = new ModsConfig(Abricos::$config['module']['mods']);
+        $this->config = new ModsConfig(isset(Abricos::$config['module']['mods']) ? Abricos::$config['module']['mods'] : array());
     }
 
     public function IsAdminRole() {
