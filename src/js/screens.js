@@ -13,8 +13,7 @@ Component.requires = {
 Component.entryPoint = function(NS){
 
     var Dom = YAHOO.util.Dom,
-        E = YAHOO.util.Event,
-        L = YAHOO.lang;
+        E = YAHOO.util.Event;
 
     var initScreen = function(elScreen, src, title){
         title = title || 'Screen ' + src;

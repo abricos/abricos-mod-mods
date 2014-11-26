@@ -48,6 +48,7 @@ class ModsModule extends Ab_Module {
 
     /**
      * Текущий модуль
+     *
      * @var string
      */
     public $currentModuleName = '';
@@ -58,6 +59,7 @@ class ModsModule extends Ab_Module {
 
     /**
      * Текущий список типа элементов каталога
+     *
      * @var string
      */
     public $currentElTypeName = '';

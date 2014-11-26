@@ -17,6 +17,7 @@ class ModsConfig {
 
     /**
      * Осуществлять сборку при скачивании
+     *
      * @var boolean
      */
     public $buildDownload = false;
@@ -647,6 +648,7 @@ class ModsCatalogManager extends CatalogModuleManager {
     /**
      * Находится ли папка в папке кеш?
      * Проверка, чтобы случайно что нить не грохнуть или создать за ее пределами.
+     *
      * @param string $dir
      */
     public function DirCheckInCache($dir) {
