@@ -6,11 +6,9 @@
 [p=scimgh]0[/p]
 
 [bkvar=screen]
-	<div class="screen">
-		<a title="{v#title}" href="{v#fsrc}" target="_blank" class="bshowbig">
-			<img alt="{v#title}" src="{v#src}" class="thumb" />
-		</a>
-	</div>
+    <a title="{v#title}" href="{v#fsrc}" target="_blank" class="img-thumbnail">
+        <img alt="{v#title}" src="{v#src}" />
+    </a>
 [/bkvar]
 
 [bkvar=modview]
@@ -20,17 +18,24 @@
 		<div class="screens">
 			{v#screens}
 		</div>
-		<div class="clear"></div>
+		<div class="clearfix"></div>
 	</div>
-
 [/bkvar]
 
 [bkvar=metatitle]Скриншоты / Каталог расширений / {v#sitename}[/bkvar]
 [*]-->
-<div class="modscreens">
-	{v#list}
+<div id="screens{v#brickid}" class="modscreens">
+    {v#list}
 </div>
 
 <script>
-	Brick.f('mods', 'screens', 'initScreens');
+    YUI().use('aui-image-viewer', function(Y){
+        if (Y.one('#screens{v#brickid} a.img-thumbnail')){ // TODO: bugfix: if empty
+            new Y.ImageViewer({
+                links: '#screens{v#brickid} a.img-thumbnail',
+                zIndex: 3000,
+                playing: false
+            }).render();
+        }
+    });
 </script>

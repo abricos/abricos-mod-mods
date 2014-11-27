@@ -27,8 +27,8 @@
 [p=scimgh]0[/p]
 
 [bkvar=screen]
-    <a title="{v#title}" href="{v#fsrc}" target="_blank" class="screen">
-        <img alt="{v#title}" src="{v#src}" class="thumb" />
+    <a title="{v#title}" href="{v#fsrc}" target="_blank" class="img-thumbnail">
+        <img alt="{v#title}" src="{v#src}" />
     </a>
 [/bkvar]
 
@@ -45,7 +45,7 @@
 [/bkvar]
 
 [bkvar=downdepends]
-    <a class="btn btn-primary btn-sm btn-download" href="{v#downlink}"
+    <a class="btn btn-primary btn-sm btn-download btn-downloaddeps" href="{v#downlink}"
             title="Скачать, включая в архив все зависимости">
         <i class="fa fa-download"></i> Скачать полностью
     </a>
@@ -151,10 +151,12 @@
 <script>
     YUI().use('aui-tabview', 'aui-image-viewer', function(Y){
         new Y.TabView({srcNode: '#modstab{v#brickid}'}).render();
-        new Y.ImageViewer({
-            links: '#screens{v#brickid} a',
-            zIndex: 3000,
-            playing: false
-        }).render();
+        if (Y.one('#screens{v#brickid} a.img-thumbnail')){ // TODO: bugfix: if empty
+            new Y.ImageViewer({
+                links: '#screens{v#brickid} a.img-thumbnail',
+                zIndex: 3000,
+                playing: false
+            }).render();
+        }
     });
 </script>

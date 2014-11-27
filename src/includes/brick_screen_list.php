@@ -59,7 +59,8 @@ for ($i = 0; $i < $elList->Count(); $i++) {
 }
 
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
-    "list" => $lst
+    "list" => $lst,
+    "brickid" => $brick->id
 ));
 
 // Вывод заголовка страницы.

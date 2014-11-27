@@ -57,8 +57,19 @@
       dt {
         font-weight: normal;
       }
+
       .download {
         margin: 10px 0;
+      }
+      a.btn-downloaddeps {
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+        zoom: 1;
+      }
+      a.btn-downloaddeps:HOVER {
+        opacity: 1;
+        filter: alpha(opacity=0);
+        zoom: 1;
       }
 
       .sep {
@@ -71,12 +82,6 @@
       padding-top: 10px;
     }
   }
-  /*
-  .modview .moditem .feature .download a {
-    float: left;
-    margin-right: 10px;
-  }
-  /**/
 
   .modlist,
   .modview {
@@ -84,14 +89,12 @@
   }
 
   /* * * * Список модулей * * * */
-  .modlist .moditem {
-    border-bottom: 1px solid #DEE2E3;
-    margin: 0 0 5px 0;
-    padding-bottom: 15px;
-  }
-
-  .modlist .more {
-    text-align: right;
+  .modlist {
+    .moditem {
+      border-bottom: 1px solid #DEE2E3;
+      margin: 0 0 5px 0;
+      padding-bottom: 15px;
+    }
   }
 
   /* * * * Просмотр модуля * * * */
@@ -100,10 +103,9 @@
   }
 
   /* * * * Screens * * * */
-  .screens .screen {
+  .screens .img-thumbnail {
     float: left;
     margin: 0 9px 10px 0;
-    border: 1px solid #DADADA;
     width: 200px;
     height: 200px;
     overflow: hidden;
@@ -112,22 +114,27 @@
   /* * * * Changelog * * * */
   .changelogs {
     dl.changelog {
+      font-weight: normal;
       margin-bottom: 10px;
       background-color: #E7E8EE;
       display: block;
       padding: 10px 10px 15px 10px;
-      min-height: 42px;
+      min-height: 62px;
+
+      dt {
+        float: left;
+        clear: left;
+        width: 150px;
+      }
+
+      dd {
+        float: none;
+        margin-left: 165px;
+      }
     }
 
-    dl.changelog dt {
-      float: left;
-      clear: left;
-      width: 150px;
-    }
-
-    dl.changelog dd {
-      float: none;
-      margin-left: 165px;
+    dt, dd {
+      font-weight: normal;
     }
 
     span.version,

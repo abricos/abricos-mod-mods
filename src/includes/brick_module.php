@@ -139,7 +139,7 @@ for ($i = 0; $i < $chLogList->Count(); $i++) {
 
 // ---------- Download with Depends -----------
 $downdepends = "";
-if (ModsConfig::$instance->buildDownload && !empty($cfgBS) && $cfgBS['optiondepends'] && !empty($file)) {
+if (ModsConfig::$instance->buildDownload && !empty($cfgBS) && isset($cfgBS['optiondepends']) && $cfgBS['optiondepends'] && !empty($file)) {
     $downdepends = Brick::ReplaceVarByData($v['downdepends'], array(
         "downlink" => $el->DownloadURI($file, true)
     ));
