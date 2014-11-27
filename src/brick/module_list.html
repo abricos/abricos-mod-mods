@@ -11,14 +11,15 @@
 [p=cfg][/p]
 
 [bkvar=table]
-	<ul class="modlist">
+	<div class="modlist">
 		{v#rows}
-	</ul>
+	</div>
 [/bkvar]
 
 [bkvar=row]
-	<li class="moditem">
+	<div class="moditem">
 		<h3><a title="{v#title}" href="{v#link}">{v#eltypetitle} «{v#title}»</a></h3>
+
 		<table class="mimain"><tbody><tr>
 		
 		<td>
@@ -39,16 +40,14 @@
 							<a href="{v#ulink}">{v#uname}</a>
 						</dd>
 					</dl>
-					<div class="clear"></div>
+					<div class="clearfix"></div>
 
-					<dl class="download">
-						<dt></dt>
-						<dd>
-							<a href="{v#downlink}">Скачать</a>
-						</dd>
-					</dl>
-					<div class="clear"></div>
-				
+					<div class="download">
+                        <a class="btn btn-primary btn-sm btn-download" href="{v#downlink}">
+                            <i class="fa fa-download"></i> Скачать
+                        </a>
+					</div>
+
 					<dl class="opt-version">
 						<dt>Версия</dt>
 						<dd>{v#version}</dd>
@@ -58,7 +57,7 @@
 						<dt>Совместимость</dt>
 						<dd>{v#compat}</dd>
 					</dl>
-					<div class="clear"></div>
+					<div class="clearfix"></div>
 					<dl class="opt-version">
 						<dt>Добавлен</dt>
 						<dd>{v#dateline}</dd>
@@ -76,7 +75,7 @@
 						<dd>{v#distdowncnt}</dd>
 					</dl>
 				</div>
-				<div class="clear"></div>
+				<div class="clearfix"></div>
 				<div class="opt-desc">
 					{v#mindesc}
 				</div>
@@ -85,7 +84,7 @@
 		
 		</tr></tbody></table>
 		<div class="clear"></div>
-    </li>
+    </div>
 [/bkvar]
 
 [bkvar=img]

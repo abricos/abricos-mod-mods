@@ -13,9 +13,7 @@ Component.requires = {
 };
 Component.entryPoint = function(NS){
 
-    var Dom = YAHOO.util.Dom,
-        L = YAHOO.lang,
-        LNG = this.language,
+    var L = YAHOO.lang,
         buildTemplate = this.buildTemplate;
 
     var NSCat = Brick.mod.catalog;

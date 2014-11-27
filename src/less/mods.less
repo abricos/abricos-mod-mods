@@ -1,0 +1,203 @@
+.mod-mods {
+
+  td {
+    vertical-align: top;
+  }
+
+  /* * * * Image Preview * * * * */
+  .tmb96 {
+    width: 96px;
+    height: 96px;
+    img {
+      max-width: 96px;
+      max-height: 96px;
+    }
+  }
+
+  .tmb {
+    display: table;
+    .tmbpre {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+    }
+    .tmbpre img {
+      margin: 0 auto !important;
+    }
+  }
+
+  .moditem {
+    .micon {
+      float: left;
+      margin: 10px 20px 0 10px;
+      .tmb {
+        border: 1px solid #DEE2E3;
+      }
+    }
+
+    .feature {
+      color: #777777;
+
+      dl {
+        margin-bottom: 0;
+        a {
+          color: #777777;
+          text-decoration: underline;
+        }
+      }
+      dl, dt, dd {
+        float: left;
+        margin-right: 5px;
+      }
+      dt {
+        font-weight: normal;
+      }
+      .download {
+        margin: 10px 0;
+      }
+
+      .sep {
+        float: left;
+        margin-right: 5px;
+      }
+    }
+
+    .info .opt-desc {
+      padding-top: 10px;
+    }
+  }
+  /*
+  .modview .moditem .feature .download a {
+    float: left;
+    margin-right: 10px;
+  }
+  /**/
+
+
+  .modlist,
+  .modview {
+    min-height: 600px;
+  }
+
+  /* * * * Список модулей * * * */
+  .modlist .moditem {
+    border-bottom: 1px solid #DEE2E3;
+    margin: 0 0 5px 0;
+    padding-bottom: 15px;
+  }
+
+  .modlist .more {
+    text-align: right;
+  }
+
+  /* * * * Просмотр модуля * * * */
+  .modview .moditem {
+    margin-bottom: 15px;
+  }
+
+  /* * * * Screens * * * */
+  .screens .screen {
+    float: left;
+    margin: 0 9px 10px 0;
+    border: 1px solid #DADADA;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  /* * * * Changelog * * * */
+  .changelogs dl.changelog {
+    margin-bottom: 10px;
+    background-color: #E7E8EE;
+    display: block;
+    padding: 10px 10px 15px 10px;
+    min-height: 42px;
+  }
+
+  .changelogs dl.changelog dt {
+    float: left;
+    clear: left;
+    width: 150px;
+  }
+
+  .changelogs dl.changelog dd {
+    float: none;
+    margin-left: 165px;
+  }
+
+  .changelogs span.version,
+  .changelogs span.date {
+    display: block;
+    text-align: center;
+  }
+
+  .changelogs span.version {
+    font-size: 16px;
+  }
+
+  /* * * * TabView * * * * */
+  .yui-navset .yui-content {
+    background: none !important;
+    border: none !important;
+    padding: 10px 0 0 0 !important;
+  }
+
+  .yui-navset .yui-nav {
+    border: none !important;
+  }
+
+  .yui-navset .yui-nav .selected,
+  .yui-navset .yui-navset-top .yui-nav .selected {
+    margin: 0 2px 0 0 !important;
+  }
+
+  .yui-navset .yui-nav .selected a,
+  .yui-navset .yui-nav .selected a em {
+    border-color: #6A7398 !important;
+    background: none !important;
+  }
+
+  .yui-navset .yui-nav .selected a,
+    /*.mod-mods .yui-navset .yui-nav .selected a:focus, /**/
+  .yui-navset .yui-nav .selected a:hover {
+    background: none !important;
+    border-width: 1px !important;
+  }
+
+  .yui-navset .yui-nav li,
+  .yui-navset .yui-navset-top .yui-nav li {
+    padding: 0 !important;
+  }
+
+  .yui-navset .yui-nav a,
+  .yui-navset .yui-navset-top .yui-nav a {
+    background: none !important;
+    color: #191B24 !important;
+    border-width: 1px !important;
+
+  }
+
+  .yui-navset .yui-nav a em,
+  .yui-navset .yui-navset-top .yui-nav a em {
+    border: none !important;
+    border-width: 0 !important;
+    padding: 5px 10px !important;
+    top: 0 !important;
+  }
+
+  .yui-navset .yui-nav a,
+  .yui-navset .yui-navset-top .yui-nav a {
+    border-color: #6A7398 !important;
+  }
+
+  .yui-navset .yui-nav a {
+    border-radius: 5px !important;
+  }
+
+  .yui-navset .yui-nav .selected a,
+  .yui-navset .yui-nav .selected a:hover,
+  .yui-navset .yui-nav a:focus,
+  .yui-navset .yui-nav a:hover {
+    background-color: #E7E8EE !important;
+  }
+}

@@ -75,17 +75,16 @@
 							<a href="{v#ulink}">{v#uname}</a>
 						</dd>
 					</dl>
-					<div class="clear"></div>
+					<div class="clearfix"></div>
 
-					<dl class="download">
-						<dt></dt>
-						<dd>
-							<a href="{v#downlink}">Скачать</a>
-							{v#downdepends}
-							<div class="clear"></div>
-						</dd>
-					</dl>
-					<div class="clear"></div>
+                    <div class="download">
+                        <a class="btn btn-primary btn-sm btn-download" href="{v#downlink}">
+                            <i class="fa fa-download"></i> Скачать
+                        </a>
+                        {v#downdepends}
+                    </div>
+
+                    <div class="clearfix"></div>
 				
 					<dl class="opt-version">
 						<dt>Версия</dt>
@@ -106,7 +105,7 @@
 						<dt>Обновлен</dt>
 						<dd>{v#upddate}</dd>
 					</dl>
-					<div class="clear"></div>
+					<div class="clearfix"></div>
 					<dl class="opt-distrib-cnt">
 						<dt>Скачан раз(а)</dt>
 						<dd>{v#distdowncnt}</dd>
