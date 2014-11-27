@@ -172,7 +172,8 @@ $brick->content = Brick::ReplaceVarByData($brick->content, array(
 
 
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
-    "desc" => $el->detail->optionsBase['desc']
+    "desc" => $el->detail->optionsBase['desc'],
+    "brickid" => $brick->id
 ));
 
 // Вывод заголовка страницы.

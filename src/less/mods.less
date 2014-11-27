@@ -1,5 +1,9 @@
 .mod-mods {
 
+  .nav-tabs {
+    margin-bottom: 15px;
+  }
+
   td {
     vertical-align: top;
   }
@@ -27,6 +31,7 @@
   }
 
   .moditem {
+
     .micon {
       float: left;
       margin: 10px 20px 0 10px;
@@ -73,7 +78,6 @@
   }
   /**/
 
-
   .modlist,
   .modview {
     min-height: 600px;
@@ -106,98 +110,34 @@
   }
 
   /* * * * Changelog * * * */
-  .changelogs dl.changelog {
-    margin-bottom: 10px;
-    background-color: #E7E8EE;
-    display: block;
-    padding: 10px 10px 15px 10px;
-    min-height: 42px;
-  }
+  .changelogs {
+    dl.changelog {
+      margin-bottom: 10px;
+      background-color: #E7E8EE;
+      display: block;
+      padding: 10px 10px 15px 10px;
+      min-height: 42px;
+    }
 
-  .changelogs dl.changelog dt {
-    float: left;
-    clear: left;
-    width: 150px;
-  }
+    dl.changelog dt {
+      float: left;
+      clear: left;
+      width: 150px;
+    }
 
-  .changelogs dl.changelog dd {
-    float: none;
-    margin-left: 165px;
-  }
+    dl.changelog dd {
+      float: none;
+      margin-left: 165px;
+    }
 
-  .changelogs span.version,
-  .changelogs span.date {
-    display: block;
-    text-align: center;
-  }
+    span.version,
+    span.date {
+      display: block;
+      text-align: center;
+    }
 
-  .changelogs span.version {
-    font-size: 16px;
-  }
-
-  /* * * * TabView * * * * */
-  .yui-navset .yui-content {
-    background: none !important;
-    border: none !important;
-    padding: 10px 0 0 0 !important;
-  }
-
-  .yui-navset .yui-nav {
-    border: none !important;
-  }
-
-  .yui-navset .yui-nav .selected,
-  .yui-navset .yui-navset-top .yui-nav .selected {
-    margin: 0 2px 0 0 !important;
-  }
-
-  .yui-navset .yui-nav .selected a,
-  .yui-navset .yui-nav .selected a em {
-    border-color: #6A7398 !important;
-    background: none !important;
-  }
-
-  .yui-navset .yui-nav .selected a,
-    /*.mod-mods .yui-navset .yui-nav .selected a:focus, /**/
-  .yui-navset .yui-nav .selected a:hover {
-    background: none !important;
-    border-width: 1px !important;
-  }
-
-  .yui-navset .yui-nav li,
-  .yui-navset .yui-navset-top .yui-nav li {
-    padding: 0 !important;
-  }
-
-  .yui-navset .yui-nav a,
-  .yui-navset .yui-navset-top .yui-nav a {
-    background: none !important;
-    color: #191B24 !important;
-    border-width: 1px !important;
-
-  }
-
-  .yui-navset .yui-nav a em,
-  .yui-navset .yui-navset-top .yui-nav a em {
-    border: none !important;
-    border-width: 0 !important;
-    padding: 5px 10px !important;
-    top: 0 !important;
-  }
-
-  .yui-navset .yui-nav a,
-  .yui-navset .yui-navset-top .yui-nav a {
-    border-color: #6A7398 !important;
-  }
-
-  .yui-navset .yui-nav a {
-    border-radius: 5px !important;
-  }
-
-  .yui-navset .yui-nav .selected a,
-  .yui-navset .yui-nav .selected a:hover,
-  .yui-navset .yui-nav a:focus,
-  .yui-navset .yui-nav a:hover {
-    background-color: #E7E8EE !important;
+    span.version {
+      font-size: 16px;
+    }
   }
 }

@@ -27,11 +27,9 @@
 [p=scimgh]0[/p]
 
 [bkvar=screen]
-	<div class="screen">
-		<a title="{v#title}" href="{v#fsrc}" target="_blank" class="bshowbig">
-			<img alt="{v#title}" src="{v#src}" class="thumb" />
-		</a>
-	</div>
+    <a title="{v#title}" href="{v#fsrc}" target="_blank" class="screen">
+        <img alt="{v#title}" src="{v#src}" class="thumb" />
+    </a>
 [/bkvar]
 
 [bkvar=changelog]
@@ -47,7 +45,10 @@
 [/bkvar]
 
 [bkvar=downdepends]
-	<a href="{v#downlink}" class="deps" title="Загрузить, включая в архив все зависимости">Скачать полностью</a>
+    <a class="btn btn-primary btn-sm btn-download" href="{v#downlink}"
+            title="Скачать, включая в архив все зависимости">
+        <i class="fa fa-download"></i> Скачать полностью
+    </a>
 [/bkvar]
 
 [bkvar=metatitle]{v#eltypetitle} «{v#title}» / Каталог расширений / {v#sitename}[/bkvar]
@@ -56,7 +57,7 @@
 	<div class="moditem">
 		<h3><a href="/mods/">Каталог расширений</a> → <span title="{v#title}">{v#eltypetitle} «{v#title}»</span></h3>
 		<table class="mimain"><tbody><tr>
-		
+
 		<td>
 			<div class="micon">
 				<div class="tmb tmb96">
@@ -64,7 +65,7 @@
 				</div>
 			</div>
 		</td>
-		
+
 		<td>
 			<div class="info">
 				<div class="feature">
@@ -78,88 +79,82 @@
 					<div class="clearfix"></div>
 
                     <div class="download">
-                        <a class="btn btn-primary btn-sm btn-download" href="{v#downlink}">
+                        <a class="btn btn-primary btn-sm btn-download" href="{v#downlink}"
+                                title="Скачать только расширение">
                             <i class="fa fa-download"></i> Скачать
                         </a>
                         {v#downdepends}
                     </div>
 
                     <div class="clearfix"></div>
-				
-					<dl class="opt-version">
-						<dt>Версия</dt>
-						<dd>{v#version}</dd>
-					</dl>
+
+					<dl class="opt-version"> <dt>Версия</dt> <dd>{v#version}</dd> </dl>
 					<div class="sep">|</div>
-					<dl class="opt-compat">
-						<dt>Совместимость</dt>
-						<dd>{v#compat}</dd>
-					</dl>
-					<div class="clear"></div>
-					<dl class="opt-version">
-						<dt>Добавлен</dt>
-						<dd>{v#dateline}</dd>
-					</dl>
-					<div class="sep">|</div>
-					<dl class="opt-compat">
-						<dt>Обновлен</dt>
-						<dd>{v#upddate}</dd>
-					</dl>
+					<dl class="opt-compat"> <dt>Совместимость</dt> <dd>{v#compat}</dd> </dl>
+
 					<div class="clearfix"></div>
-					<dl class="opt-distrib-cnt">
-						<dt>Скачан раз(а)</dt>
-						<dd>{v#distdowncnt}</dd>
-					</dl>
+
+					<dl class="opt-version"> <dt>Добавлен</dt> <dd>{v#dateline}</dd> </dl>
+					<div class="sep">|</div>
+					<dl class="opt-compat"> <dt>Обновлен</dt> <dd>{v#upddate}</dd> </dl>
+
+                    <div class="clearfix"></div>
+
+                    <dl class="opt-distrib-cnt"> <dt>Скачан раз(а)</dt> <dd>{v#distdowncnt}</dd> </dl>
 				</div>
 			</div>
 		</td>
-		
+
 		</tr></tbody></table>
     </div>
-	<div class="clear"></div>
-    
-    <div id="mod-mods-maintab" class="yui-navset">
-		<ul class="yui-nav">
-			<li class="selected">
-				<a href="#mod-mods-maintab-tabinfo"><em>Информация</em></a>
-			</li>
-			<li style="display: {v#disscreens}">
-				<a href="#mod-mods-maintab-tabscreen"><em>Скриншоты {v#screencnt}</em></a>
-			</li>
-			<li style="display: {v#disdepends}">
-				<a href="#mod-mods-maintab-tabdepends"><em>Зависимость {v#dependscnt}</em></a>
-			</li>
-			<li>
-				<a href="#mod-mods-maintab-tabchlog"><em>Список изменений</em></a>
-			</li>
-		</ul>            
-		<div class="yui-content">
-			<div id="mod-mods-maintab-tabinfo">
-				{v#desc}
-			</div>
-			<div id="mod-mods-maintab-tabscreen" style="display: {v#disscreens}">
-				<div class="screens">
-					{v#screens}
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div id="mod-mods-maintab-tabdepends" style="display: {v#disdepends}">
-				{v#depends}
-				<div class="clear"></div>
-			</div>
-			<div id="mod-mods-maintab-tabchlog" >
-				<div class="changelogs">
-					{v#changelog}
-				</div>
-				<div class="clear"></div>
-			</div>
-		</div>
-	</div>
-</div>
+	<div class="clearfix"></div>
 
+    <div id="modstab{v#brickid}">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tabinfo{v#brickid}">Информация</a>
+            </li>
+            <li style="display: {v#disscreens}">
+                <a href="#tabscreen{v#brickid}">Скриншоты {v#screencnt}</a>
+            </li>
+            <li style="display: {v#disdepends}">
+                <a href="#tabdepends{v#brickid}">Зависимость {v#dependscnt}</a>
+            </li>
+            <li>
+                <a href="#tabchlog{v#brickid}">Список изменений</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="tabinfo{v#brickid}" class="tab-pane">
+                {v#desc}
+            </div>
+            <div id="tabscreen{v#brickid}" style="display: {v#disscreens}" class="tab-pane">
+                <div id="screens{v#brickid}" class="screens">
+                    {v#screens}
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="tabdepends{v#brickid}" style="display: {v#disdepends}" class="tab-pane">
+                {v#depends}
+                <div class="clearfix"></div>
+            </div>
+            <div id="tabchlog{v#brickid}" class="tab-pane">
+                <div class="changelogs">
+                    {v#changelog}
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script>
-	Brick.ff('mods', 'tabview', function(){
-		new YAHOO.widget.TabView('mod-mods-maintab');
-	});
-	Brick.f('mods', 'screens', 'initScreens');
+    YUI().use('aui-tabview', 'aui-image-viewer', function(Y){
+        new Y.TabView({srcNode: '#modstab{v#brickid}'}).render();
+        new Y.ImageViewer({
+            links: '#screens{v#brickid} a',
+            zIndex: 3000,
+            playing: false
+        }).render();
+    });
 </script>

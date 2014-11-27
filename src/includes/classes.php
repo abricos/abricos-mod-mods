@@ -346,7 +346,7 @@ class ModsCatalogManager extends CatalogModuleManager {
         $aDepends = explode(",", $el->ext['depends']);
         for ($i = 0; $i < count($aDepends); $i++) {
             $nm = trim($aDepends[$i]);
-            if (empty($nm) || $result[$nm]) {
+            if (empty($nm) || (isset($result[$nm]) && $result[$nm])) {
                 continue;
             }
             $result[$nm] = true;
@@ -362,11 +362,11 @@ class ModsCatalogManager extends CatalogModuleManager {
 
     public function ElementBuildKey(ModsElement $el, $withDepends) {
 
-        if (!empty($this->_cacheElementBuildKey[$el->id])) {
+        if (isset($this->_cacheElementBuildKey[$el->id]) && !empty($this->_cacheElementBuildKey[$el->id])) {
             return $this->_cacheElementBuildKey[$el->id];
         }
 
-        if ($this->_cacheSafeRecursKey[$el->id]) {
+        if (isset($this->_cacheSafeRecursKey[$el->id]) && $this->_cacheSafeRecursKey[$el->id]) {
             return "";
         }
         $this->_cacheSafeRecursKey[$el->id] = true;
@@ -421,7 +421,7 @@ class ModsCatalogManager extends CatalogModuleManager {
 
     protected function ElementBuildDownloadFileMethod($name, $withDepends = false) {
 
-        if ($this->_cacheSafeRecursBuild[$name]) {
+        if (isset($this->_cacheSafeRecursBuild[$name]) && $this->_cacheSafeRecursBuild[$name]) {
             return null;
         }
         $this->_cacheSafeRecursBuild[$name] = true;
