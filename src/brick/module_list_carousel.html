@@ -1,0 +1,79 @@
+<!--[*]
+[script]brick_module_list.php[/script]
+[mcss=mods]mods.css[/mcss]
+
+[p=forcontent]false[/p]
+[p=limit]500[/p]
+
+[p=imgw]96[/p]
+[p=imgh]96[/p]
+
+[p=cfg][/p]
+
+[bkvar=img]
+	<a class="tmbpre" title="{v#title}" href="{v#link}">
+		<img alt="{v#title}" src="{v#src}" />
+	</a>
+[/bkvar]
+
+[bkvar=imgempty]
+	<a class="tmbpre" title="{v#title}" href="{v#link}">
+		<img alt="{v#title}" src="/modules/mods/images/emptyimg.gif" />
+	</a>
+[/bkvar]
+
+[bkvar=table]
+	<div id="modlist-carousel-{v#brickid}" class="modlist-carousel carousel slide" data-ride="carousel" data-interval="false">
+		<div class="carousel-inner" role="listbox">
+			{v#rows}
+		</div>
+
+		 <a class="left carousel-control" href="#modlist-carousel-{v#brickid}" role="button" data-slide="prev">
+			<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+		<a class="right carousel-control" href="#modlist-carousel-{v#brickid}" role="button" data-slide="next">
+			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+	</div>
+[/bkvar]
+
+[p=groupCount]3[/p]
+
+[bkvar=groupFirstClass]active[/bkvar]
+
+[bkvar=group]
+	<div class="item {v#firstclass}">
+		{v#rows}
+	</div>
+[/bkvar]
+
+[bkvar=row]
+<div class="col-xs-4">
+	<div class="thumbnail">
+		<div class="pull-right info">
+			<div class="opt">{v#eltypetitle}</div>
+			<div class="opt">Версия: {v#version}</div>
+			<div class="opt">{v#upddate}</div>
+		</div>
+
+		<div class="tmb tmb96">
+			{v#image}
+		</div>
+
+		<div class="caption">
+			<h4 class="text-center">
+				<a title="{v#title}" href="{v#link}">{v#title}</a>
+			</h4>
+
+			<div class="mindesc">
+				{v#mindesc}
+			</div>
+
+		</div>
+    </div>
+</div>
+[/bkvar]
+
+[*]-->{v#result}

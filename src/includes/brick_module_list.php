@@ -43,7 +43,10 @@ if (is_object($p['cfg'])) { // сборку вызывает другий кир
 $cfg->catids = array(0);
 
 $adr = Abricos::$adress;
-$page = $adr->dir[count($adr->dir) - 1];
+$page = "";
+if ($adr->level > 0) {
+    $page = $adr->dir[count($adr->dir) - 1];
+}
 
 if (preg_match("/^page[0-9]+/", $page)) {
     $page = intval(substr($page, 4));
@@ -65,10 +68,12 @@ $files = $cMan->ElementOptionFileList($elList);
 
 $downList = $cMan->ElementDownloadInfoList();
 
+$groupCount = isset($p["groupCount"]) ? intval($p["groupCount"]) : 0;
+$groupIndex = 0;
+$groupLst = "";
 $lst = "";
 for ($i = 0; $i < $elList->Count(); $i++) {
     $el = $elList->GetByIndex($i);
-
 
     if (empty($el->foto)) {
         $image = $v["imgempty"];
@@ -121,13 +126,36 @@ for ($i = 0; $i < $elList->Count(); $i++) {
         "link" => $el->URI()
     );
 
-    $lst .= Brick::ReplaceVarByData($v['row'], $replace);
+    $sItem = Brick::ReplaceVarByData($v['row'], $replace);
+
+    if ($groupCount > 0) {
+        $groupLst .= $sItem;
+        $groupIndex++;
+
+        if ($groupIndex === $groupCount) {
+            $groupIndex = 0;
+            $lst .= Brick::ReplaceVarByData($v['group'], array(
+                "rows" => $groupLst,
+                "firstclass" => empty($lst) ? $v['groupFirstClass'] : ""
+            ));
+            $groupLst = "";
+        }
+    } else {
+        $lst .= $sItem;
+    }
+}
+
+if ($groupCount > 0 && $groupIndex > 0) {
+    $lst .= Brick::ReplaceVarByData($v['group'], array(
+        "rows" => $groupLst
+    ));
 }
 
 $brick->content = Brick::ReplaceVarByData($brick->content, array(
     "result" => Brick::ReplaceVarByData($v['table'], array(
         "rows" => $lst
-    ))
+    )),
+    "brickid" => $brick->id
 ));
 
 ?>
