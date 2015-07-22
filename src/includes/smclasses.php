@@ -18,7 +18,7 @@ class ModsElementTypeMenuItem extends SMMenuItem {
      * @param SMMenuItem $parent
      * @param CatalogElementType $elType
      */
-    public function __construct(SMMenuItem $parent, $id, $elType, $cnt) {
+    public function __construct(SMMenuItem $parent, $id, $elType, $cnt){
         parent::__construct(array(
             "id" => SMMenuItem::ToGlobalId("mods", $id),
             "pid" => $parent->id,
@@ -42,7 +42,7 @@ class ModsElementMenuItem extends SMMenuItem {
      * @param SMMenuItem $parent
      * @param ModsElement $el
      */
-    public function __construct(SMMenuItem $parent, $id, $el, $isLink = false) {
+    public function __construct(SMMenuItem $parent, $id, $el, $isLink = false){
         parent::__construct(array(
             "id" => SMMenuItem::ToGlobalId("mods", $id),
             "pid" => $parent->id,

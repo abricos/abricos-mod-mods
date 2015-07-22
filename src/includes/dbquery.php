@@ -7,7 +7,7 @@
  */
 class ModsQuery {
 
-    public static function ElementDownloadCounterUpdate(Ab_Database $db, $elName) {
+    public static function ElementDownloadCounterUpdate(Ab_Database $db, $elName){
         $sql = "
 			INSERT INTO ".$db->prefix."mods_download
 			(elementname, counter, dateline, upddate) VALUES (
@@ -22,7 +22,7 @@ class ModsQuery {
         $db->query_write($sql);
     }
 
-    public static function ElementDownloadInfoList(Ab_Database $db, $elName = '') {
+    public static function ElementDownloadInfoList(Ab_Database $db, $elName = ''){
         $sql = "
 			SELECT
 				elementname as nm,

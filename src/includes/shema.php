@@ -18,7 +18,7 @@ ModsManager::$instance->RolesDisable();
 
 $cManager = ModsManager::$instance->cManager;
 
-if ($updateManager->isInstall()) {
+if ($updateManager->isInstall()){
     Abricos::GetModule('mods')->permission->Install();
 
     $ord = 100;
@@ -79,11 +79,11 @@ if ($updateManager->isInstall()) {
     ));
 }
 
-if ($updateManager->isUpdate('0.1.1') && !$updateManager->isInstall()) {
+if ($updateManager->isUpdate('0.1.1') && !$updateManager->isInstall()){
     Abricos::GetModule('mods')->permission->Reinstall();
 }
 
-if ($updateManager->isUpdate('0.1.3')) {
+if ($updateManager->isUpdate('0.1.3')){
     $cManager->ElementTypeSave(0, array(
         "nm" => "core",
         "tl" => "Ядро",

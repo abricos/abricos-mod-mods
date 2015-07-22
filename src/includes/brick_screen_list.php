@@ -14,7 +14,7 @@ $cMan = ModsModule::$instance->GetManager()->cManager;
 
 $elList = $cMan->ModuleList();
 
-if (empty($elList)) {
+if (empty($elList)){
     $brick->content = "";
     return;
 }
@@ -32,14 +32,14 @@ $elTypeList = $cMan->ElementTypeList();
 $elsFotos = $cMan->ElementFotoList($elList);
 
 $lst = "";
-for ($i = 0; $i < $elList->Count(); $i++) {
+for ($i = 0; $i < $elList->Count(); $i++){
     $el = $elList->GetByIndex($i);
 
     $elType = $elTypeList->Get($el->elTypeId);
 
     $lstScreen = "";
     $fotos = $elsFotos->GetGroup($el->id);
-    for ($ii = 1; $ii < count($fotos); $ii++) {
+    for ($ii = 1; $ii < count($fotos); $ii++){
         $foto = $fotos[$ii];
         $lstScreen .= Brick::ReplaceVarByData($v['screen'], array(
             "title" => $el->title,
@@ -47,7 +47,7 @@ for ($i = 0; $i < $elList->Count(); $i++) {
             "fsrc" => $foto->Link()
         ));
     }
-    if (empty($lstScreen)) {
+    if (empty($lstScreen)){
         continue;
     }
     $lst .= Brick::ReplaceVarByData($v['modview'], array(
@@ -64,9 +64,9 @@ $brick->content = Brick::ReplaceVarByData($brick->content, array(
 ));
 
 // Вывод заголовка страницы.
-if (!empty($el->detail->metaTitle) && $el->detail->metaTitle != "&nbsp;") {
+if (!empty($el->detail->metaTitle) && $el->detail->metaTitle != "&nbsp;"){
     Brick::$builder->SetGlobalVar('meta_title', $el->detail->metaTitle);
-} else if (!empty($el->title) && $el->title != "&nbsp;") {
+} else if (!empty($el->title) && $el->title != "&nbsp;"){
     $metaTitle = Brick::ReplaceVarByData($v['metatitle'], array(
         "eltypetitle" => $elType->title,
         "title" => $el->title,
@@ -76,11 +76,11 @@ if (!empty($el->detail->metaTitle) && $el->detail->metaTitle != "&nbsp;") {
 }
 
 // Вывод ключевых слов
-if (!empty($el->detail->metaKeys) && $el->detail->metaKeys != "&nbsp;") {
+if (!empty($el->detail->metaKeys) && $el->detail->metaKeys != "&nbsp;"){
     Brick::$builder->SetGlobalVar('meta_keys', $el->detail->metaKeys);
 }
 // Вывод описания
-if (!empty($el->detail->metaDesc) && $el->detail->metaDesc != "&nbsp;") {
+if (!empty($el->detail->metaDesc) && $el->detail->metaDesc != "&nbsp;"){
     Brick::$builder->SetGlobalVar('meta_desc', $el->detail->metaDesc);
 }
 

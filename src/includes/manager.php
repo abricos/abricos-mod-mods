@@ -27,7 +27,7 @@ class ModsManager extends Ab_ModuleManager {
      */
     public $cManager;
 
-    public function __construct(ModsModule $module) {
+    public function __construct(ModsModule $module){
         parent::__construct($module);
 
         ModsManager::$instance = $this;
@@ -37,41 +37,41 @@ class ModsManager extends Ab_ModuleManager {
         $this->config = new ModsConfig(isset(Abricos::$config['module']['mods']) ? Abricos::$config['module']['mods'] : array());
     }
 
-    public function IsAdminRole() {
+    public function IsAdminRole(){
         return $this->IsRoleEnable(ModsAction::ADMIN);
     }
 
-    public function IsModeratorRole() {
-        if ($this->IsAdminRole()) {
+    public function IsModeratorRole(){
+        if ($this->IsAdminRole()){
             return true;
         }
         return $this->IsRoleEnable(ModsAction::MODERATOR);
     }
 
-    public function IsOperatorRole() {
-        if ($this->IsAdminRole()) {
+    public function IsOperatorRole(){
+        if ($this->IsAdminRole()){
             return true;
         }
         return $this->IsRoleEnable(ModsAction::OPERATOR);
     }
 
-    public function IsWriteRole() {
-        if ($this->IsAdminRole()) {
+    public function IsWriteRole(){
+        if ($this->IsAdminRole()){
             return true;
         }
         return $this->IsRoleEnable(ModsAction::WRITE);
     }
 
-    public function IsViewRole() {
-        if ($this->IsWriteRole()) {
+    public function IsViewRole(){
+        if ($this->IsWriteRole()){
             return true;
         }
         return $this->IsRoleEnable(ModsAction::VIEW);
     }
 
-    public function AJAX($d) {
+    public function AJAX($d){
         $ret = $this->cManager->AJAX($d);
-        if (!empty($ret)) {
+        if (!empty($ret)){
             return $ret;
         }
 
@@ -83,7 +83,7 @@ class ModsManager extends Ab_ModuleManager {
      *
      * @param SMMenuItem $menuItem
      */
-    public function Sitemap_MenuBuild(SMMenuItem $mItem) {
+    public function Sitemap_MenuBuild(SMMenuItem $mItem){
         require_once 'smclasses.php';
 
         $cMan = $this->cManager;
@@ -93,13 +93,13 @@ class ModsManager extends Ab_ModuleManager {
         $mItems = array();
 
         $elTypeList = $cMan->ElementTypeList();
-        for ($i = 1; $i < $elTypeList->Count(); $i++) {
+        for ($i = 1; $i < $elTypeList->Count(); $i++){
             $elType = $elTypeList->GetByIndex($i);
             $elTpCnt = $stat->elTypeCounter[$elType->id];
-            if ($elTpCnt > 0) {
+            if ($elTpCnt > 0){
                 $cmItem = new ModsElementTypeMenuItem($mItem, $mId++, $elType, $elTpCnt);
                 $mItems[$elType->id] = $cmItem;
-                if ($elType->name == ModsModule::$instance->currentElTypeName) {
+                if ($elType->name == ModsModule::$instance->currentElTypeName){
                     $cmItem->isSelect = true;
                 }
             }
@@ -108,41 +108,41 @@ class ModsManager extends Ab_ModuleManager {
         $modList = $this->cManager->ModuleList();
         $curModName = ModsModule::$instance->currentModuleName;
 
-        if (count($mItems) >= 2) {
-            for ($i = 0; $i < $modList->Count(); $i++) {
+        if (count($mItems) >= 2){
+            for ($i = 0; $i < $modList->Count(); $i++){
                 $el = $modList->GetByIndex($i);
                 $mTpItem = $mItems[$el->elTypeId];
                 $cmItem = new ModsElementMenuItem($mTpItem, $mId++, $el, true);
                 $mTpItem->childs->Add($cmItem);
-                if ($el->name == $curModName) {
+                if ($el->name == $curModName){
                     $cmItem->isSelect = true;
                     $mTpItem->isSelect = true;
                     $mItem->isSelect = true;
                 }
             }
-            foreach ($mItems as $elTypeId => $cmItem) {
+            foreach ($mItems as $elTypeId => $cmItem){
                 $mItem->childs->Add($cmItem);
             }
         } else {
 
-            for ($i = 0; $i < $modList->Count(); $i++) {
+            for ($i = 0; $i < $modList->Count(); $i++){
                 $cmItem = new ModsElementMenuItem($mItem, $mId++, $modList->GetByIndex($i));
                 $mItem->childs->Add($cmItem);
             }
         }
 
-        $i18n = ModsModule::$instance->GetI18n();
+        $i18n = ModsModule::$instance->I18n();
 
         // скриншоты
         $cmItem = new SMMenuItem(array(
             "id" => SMMenuItem::ToGlobalId("mods", $mId++),
             "pid" => $mItem->id,
             "lnk" => "/mods/?p=screens",
-            "tl" => $i18n['screen_title']
+            "tl" => $i18n->Translate('screen_title')
         ));
         $mItem->childs->Add($cmItem);
 
-        if (ModsModule::$instance->currentScreensPage) {
+        if (ModsModule::$instance->currentScreensPage){
             $cmItem->isSelect = true;
             $mItem->isSelect = true;
         }
@@ -152,21 +152,21 @@ class ModsManager extends Ab_ModuleManager {
             "id" => SMMenuItem::ToGlobalId("mods", $mId++),
             "pid" => $mItem->id,
             "lnk" => "/mods/?p=changelogs",
-            "tl" => $i18n['changelog_title']
+            "tl" => $i18n->Translate('changelog_title')
         ));
         $mItem->childs->Add($cmItem);
-        if (ModsModule::$instance->currentChangelogsPage) {
+        if (ModsModule::$instance->currentChangelogsPage){
             $cmItem->isSelect = true;
             $mItem->isSelect = true;
         }
     }
 
-    public function Bos_MenuData() {
-        $i18n = $this->module->GetI18n();
+    public function Bos_MenuData(){
+        $i18n = $this->module->I18n();
         return array(
             array(
                 "name" => "mods",
-                "title" => $i18n['title'],
+                "title" => $i18n->Translate('title'),
                 "role" => ModsAction::ADMIN,
                 "icon" => "/modules/mods/images/logo-48x48.png",
                 "url" => "mods/wspace/ws",

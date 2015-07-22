@@ -24,11 +24,12 @@ class ModsModule extends Ab_Module {
 
     private $_manager = null;
 
-    public function ModsModule() {
-        $this->version = "0.1.3";
+    public function ModsModule(){
+        ModsModule::$instance = $this;
+
+        $this->version = "0.1.4";
         $this->name = "mods";
         $this->takelink = "mods";
-        ModsModule::$instance = $this;
 
         $this->permission = new ModsPermission($this);
     }
@@ -38,8 +39,8 @@ class ModsModule extends Ab_Module {
      *
      * @return ModsManager
      */
-    public function GetManager() {
-        if (is_null($this->_manager)) {
+    public function GetManager(){
+        if (is_null($this->_manager)){
             require_once 'includes/manager.php';
             $this->_manager = new ModsManager($this);
         }
@@ -64,28 +65,28 @@ class ModsModule extends Ab_Module {
      */
     public $currentElTypeName = '';
 
-    public function GetContentName() {
+    public function GetContentName(){
         $adress = Abricos::$adress;
 
         $this->currentElTypeName = Abricos::CleanGPC('g', 'tp', TYPE_STR);
 
         $cPage = Abricos::CleanGPC('g', 'p', TYPE_STR);
 
-        if ($adress->level > 2 && $adress->dir[2] == 'download') {
+        if ($adress->level > 2 && $adress->dir[2] == 'download'){
             return 'download';
-        } else if ($cPage == 'changelogs') {
+        } else if ($cPage == 'changelogs'){
             $this->currentChangelogsPage = true;
             return 'changelogs';
-        } else if ($cPage == 'screens') {
+        } else if ($cPage == 'screens'){
             $this->currentScreensPage = true;
             return 'screens';
-        } else if ($adress->level >= 2 && empty($this->currentElTypeName)) {
+        } else if ($adress->level >= 2 && empty($this->currentElTypeName)){
             $modName = $adress->dir[1];
             $cMan = $this->GetManager()->cManager;
 
             // TODO: необходимо организовать кеширование
             $el = $cMan->Module($modName);
-            if (empty($el)) {
+            if (empty($el)){
                 return '';
             }
 
@@ -100,7 +101,7 @@ class ModsModule extends Ab_Module {
     /**
      * Этот модуль добавляет пункты меню в главное меню
      */
-    public function Sitemap_IsMenuBuild() {
+    public function Sitemap_IsMenuBuild(){
         return true;
     }
 
@@ -109,7 +110,7 @@ class ModsModule extends Ab_Module {
      *
      * @return bool
      */
-    public function Bos_IsMenu() {
+    public function Bos_IsMenu(){
         return true;
     }
 }
@@ -124,7 +125,7 @@ class ModsAction {
 
 class ModsPermission extends Ab_UserPermission {
 
-    public function ModsPermission(ModsModule $module) {
+    public function ModsPermission(ModsModule $module){
         $defRoles = array(
             new Ab_UserRole(ModsAction::VIEW, Ab_UserGroup::GUEST),
             new Ab_UserRole(ModsAction::VIEW, Ab_UserGroup::REGISTERED),
@@ -139,7 +140,7 @@ class ModsPermission extends Ab_UserPermission {
         parent::__construct($module, $defRoles);
     }
 
-    public function GetRoles() {
+    public function GetRoles(){
         return array(
             ModsAction::VIEW => $this->CheckAction(ModsAction::VIEW),
             ModsAction::WRITE => $this->CheckAction(ModsAction::WRITE),
@@ -151,7 +152,7 @@ class ModsPermission extends Ab_UserPermission {
 }
 
 $modCatalog = Abricos::GetModule('catalog');
-if (empty($modCatalog)) {
+if (empty($modCatalog)){
     return;
 }
 

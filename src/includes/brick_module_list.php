@@ -24,7 +24,7 @@ Abricos::GetModule('filemanager')->EnableThumbSize(array(
 
 $elTypeList = $cMan->ElementTypeList();
 
-if (is_object($p['cfg'])) { // сборку вызывает другий кирпич
+if (is_object($p['cfg'])){ // сборку вызывает другий кирпич
     $cfg = $p['cfg'];
 } else { // сборку вызывает стартовый кирпич
 
@@ -32,9 +32,9 @@ if (is_object($p['cfg'])) { // сборку вызывает другий кир
     $cfg->limit = $p['limit'];
 
     $curElTypeName = ModsModule::$instance->currentElTypeName;
-    if (!empty($curElTypeName)) {
+    if (!empty($curElTypeName)){
         $elType = $elTypeList->GetByName($curElTypeName);
-        if (!empty($curElTypeName)) {
+        if (!empty($curElTypeName)){
             array_push($cfg->eltpids, $elType->id);
         }
     }
@@ -44,13 +44,13 @@ $cfg->catids = array(0);
 
 $adr = Abricos::$adress;
 $page = "";
-if ($adr->level > 0) {
+if ($adr->level > 0){
     $page = $adr->dir[count($adr->dir) - 1];
 }
 
-if (preg_match("/^page[0-9]+/", $page)) {
+if (preg_match("/^page[0-9]+/", $page)){
     $page = intval(substr($page, 4));
-    if ($page > 0) {
+    if ($page > 0){
         $cfg->page = $page;
     }
 }
@@ -58,7 +58,7 @@ if (preg_match("/^page[0-9]+/", $page)) {
 $elList = $cMan->ModuleList($cfg);
 
 $brick->elementList = $elList;
-if (empty($elList)) {
+if (empty($elList)){
     $brick->content = "";
     return;
 }
@@ -72,10 +72,10 @@ $groupCount = isset($p["groupCount"]) ? intval($p["groupCount"]) : 0;
 $groupIndex = 0;
 $groupLst = "";
 $lst = "";
-for ($i = 0; $i < $elList->Count(); $i++) {
+for ($i = 0; $i < $elList->Count(); $i++){
     $el = $elList->GetByIndex($i);
 
-    if (empty($el->foto)) {
+    if (empty($el->foto)){
         $image = $v["imgempty"];
     } else {
         $image = Brick::ReplaceVarByData($v["img"], array(
@@ -93,10 +93,10 @@ for ($i = 0; $i < $elList->Count(); $i++) {
 
     $aTmp = explode(":", $el->ext['distrib']);
     $file = $files->Get($aTmp[0]);
-    if (!empty($file)) {
+    if (!empty($file)){
         $upd = $file->dateline;
         $file->name = $el->name;
-        if (!empty($el->ext['version'])) {
+        if (!empty($el->ext['version'])){
             $file->name .= "-".$el->ext['version'];
         }
         $file->name .= ".zip";
@@ -104,7 +104,7 @@ for ($i = 0; $i < $elList->Count(); $i++) {
     $downloadCount = !empty($file) ? $file->counter : 0;
 
     $downInfo = $downList->Get($el->name);
-    if (ModsConfig::$instance->buildDownload && !empty($downInfo)) {
+    if (ModsConfig::$instance->buildDownload && !empty($downInfo)){
         $downloadCount = $downInfo->counter;
     }
 
@@ -128,11 +128,11 @@ for ($i = 0; $i < $elList->Count(); $i++) {
 
     $sItem = Brick::ReplaceVarByData($v['row'], $replace);
 
-    if ($groupCount > 0) {
+    if ($groupCount > 0){
         $groupLst .= $sItem;
         $groupIndex++;
 
-        if ($groupIndex === $groupCount) {
+        if ($groupIndex === $groupCount){
             $groupIndex = 0;
             $lst .= Brick::ReplaceVarByData($v['group'], array(
                 "rows" => $groupLst,
@@ -145,7 +145,7 @@ for ($i = 0; $i < $elList->Count(); $i++) {
     }
 }
 
-if ($groupCount > 0 && $groupIndex > 0) {
+if ($groupCount > 0 && $groupIndex > 0){
     $lst .= Brick::ReplaceVarByData($v['group'], array(
         "rows" => $groupLst
     ));

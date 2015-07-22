@@ -47,18 +47,18 @@ class ModsConfig {
      */
     public $buildStructure = null;
 
-    public function __construct($cfg) {
+    public function __construct($cfg){
         ModsConfig::$instance = $this;
 
-        if (empty($cfg)) {
+        if (empty($cfg)){
             $cfg = array();
         }
 
-        if (isset($cfg['buildDownload'])) {
+        if (isset($cfg['buildDownload'])){
             $this->buildDownload = $cfg['buildDownload'];
         }
 
-        if (isset($cfg['buildStructure'])) {
+        if (isset($cfg['buildStructure'])){
             $this->buildStructure = $cfg['buildStructure'];
         }
     }
@@ -66,29 +66,29 @@ class ModsConfig {
 
 class ModsElement extends CatalogElement {
 
-    public function URI() {
+    public function URI(){
         return "/mods/".$this->name."/";
     }
 
-    public function DownloadURI(CatalogFile $file, $withDepends = false) {
+    public function DownloadURI(CatalogFile $file, $withDepends = false){
         $file->name = $this->name;
         $version = "";
-        if (!empty($this->ext['version'])) {
+        if (!empty($this->ext['version'])){
             $file->name .= "-".$this->ext['version'];
             $version = $this->ext['version'];
         }
         $file->name .= ".zip";
 
         $downloadURI = $file->URL();
-        if (ModsConfig::$instance->buildDownload) {
+        if (ModsConfig::$instance->buildDownload){
             $downloadURI = "/mods/".$this->name."/download/".$this->name."-";
-            if (empty($version)) {
+            if (empty($version)){
                 $downloadURI .= $file->id;
             } else {
                 $downloadURI .= $version;
             }
             $downloadURI .= ".zip";
-            if ($withDepends) {
+            if ($withDepends){
                 $downloadURI .= "?depends=true";
             }
         }
@@ -101,23 +101,23 @@ class ModsElementList extends CatalogElementList {
     /**
      * @return ModsElement
      */
-    public function GetByIndex($i) {
+    public function GetByIndex($i){
         return parent::GetByIndex($i);
     }
 
-    public function GetByName($elName) {
+    public function GetByName($elName){
         $cnt = $this->Count();
 
-        for ($i = 0; $i < $cnt; $i++) {
+        for ($i = 0; $i < $cnt; $i++){
             $el = $this->GetByIndex($i);
-            if ($el->name == $elName) {
+            if ($el->name == $elName){
                 return $el;
             }
         }
         return null;
     }
 
-    public function ToAJAX() {
+    public function ToAJAX(){
         return parent::ToAJAX(ModsCatalogManager::$instance);
     }
 }
@@ -127,7 +127,7 @@ class ModsDownloadInfo extends AbricosItem {
     public $counter;
     public $version;
 
-    public function __construct($d) {
+    public function __construct($d){
         $this->id = strval($d['nm']);
         $this->counter = intval($d['cnt']);
         $this->version = intval($d['vs']);
@@ -139,14 +139,14 @@ class ModsDownloadInfoList extends AbricosList {
     /**
      * @return ModsDownloadInfo
      */
-    public function GetByIndex($i) {
+    public function GetByIndex($i){
         return parent::GetByIndex($i);
     }
 
     /**
      * @return ModsDownloadInfo
      */
-    public function Get($name) {
+    public function Get($name){
         return parent::Get($name);
     }
 }
@@ -164,7 +164,7 @@ class ModsBuildInfo {
     public $changelogFile = '';
     public $outFile = '';
 
-    public function __construct(ModsElement $el) {
+    public function __construct(ModsElement $el){
         $this->element = $el;
     }
 }
@@ -181,7 +181,7 @@ class ModsCatalogManager extends CatalogModuleManager {
      */
     public $manager;
 
-    public function __construct() {
+    public function __construct(){
         $this->manager = ModsManager::$instance;
 
         ModsCatalogManager::$instance = $this;
@@ -198,23 +198,23 @@ class ModsCatalogManager extends CatalogModuleManager {
         $this->cfgVersionControl = true;
     }
 
-    public function IsAdminRole() {
+    public function IsAdminRole(){
         return $this->manager->IsAdminRole();
     }
 
-    public function IsModeratorRole() {
+    public function IsModeratorRole(){
         return $this->manager->IsModeratorRole();
     }
 
-    public function IsOperatorRole() {
+    public function IsOperatorRole(){
         return $this->manager->IsOperatorRole();
     }
 
-    public function IsWriteRole() {
+    public function IsWriteRole(){
         return $this->manager->IsWriteRole();
     }
 
-    public function IsViewRole() {
+    public function IsViewRole(){
         return $this->manager->IsViewRole();
     }
 
@@ -222,10 +222,10 @@ class ModsCatalogManager extends CatalogModuleManager {
      * @param integer $modName
      * @return ModsElement
      */
-    public function Module($name) {
+    public function Module($name){
         $el = $this->ElementByName($name);
 
-        if (empty($el)) {
+        if (empty($el)){
             return null;
         }
 
@@ -244,8 +244,8 @@ class ModsCatalogManager extends CatalogModuleManager {
      * @param mixed $cfg
      * @return ModsElementList
      */
-    public function ModuleList($cfg = null) {
-        if (empty($cfg)) {
+    public function ModuleList($cfg = null){
+        if (empty($cfg)){
             $cfg = new CatalogElementListConfig();
             $cfg->catids = array(0);
         }
@@ -264,8 +264,8 @@ class ModsCatalogManager extends CatalogModuleManager {
         return $this->ElementList($cfg);
     }
 
-    public function ElementDownloadCounterUpdate($name) {
-        if (!$this->IsViewRole()) {
+    public function ElementDownloadCounterUpdate($name){
+        if (!$this->IsViewRole()){
             return null;
         }
 
@@ -280,21 +280,21 @@ class ModsCatalogManager extends CatalogModuleManager {
      * @param string $name
      * @return ModsDownloadInfoList
      */
-    public function ElementDownloadInfoList($clearCache = false) {
-        if (!$this->IsViewRole()) {
+    public function ElementDownloadInfoList($clearCache = false){
+        if (!$this->IsViewRole()){
             return null;
         }
 
-        if ($clearCache) {
+        if ($clearCache){
             $this->_cacheDownList = null;
         }
-        if (!empty($this->_cacheDownList)) {
+        if (!empty($this->_cacheDownList)){
             return $this->_cacheDownList;
         }
 
         $list = new ModsDownloadInfoList();
         $rows = ModsQuery::ElementDownloadInfoList($this->db);
-        while (($d = $this->db->fetch_array($rows))) {
+        while (($d = $this->db->fetch_array($rows))){
             $list->Add(new ModsDownloadInfo($d));
         }
 
@@ -307,8 +307,8 @@ class ModsCatalogManager extends CatalogModuleManager {
     /**
      * @return ModsElementList
      */
-    public function ElementListForBuild() {
-        if (!empty($this->_cacheElementListBuild)) {
+    public function ElementListForBuild(){
+        if (!empty($this->_cacheElementListBuild)){
             return $this->_cacheElementListBuild;
         }
 
@@ -322,8 +322,8 @@ class ModsCatalogManager extends CatalogModuleManager {
     /**
      * @return CatalogFileList
      */
-    public function ElementOptionFileListForBuild() {
-        if (!empty($this->_cacheElementFileListBuild)) {
+    public function ElementOptionFileListForBuild(){
+        if (!empty($this->_cacheElementFileListBuild)){
             return $this->_cacheElementFileListBuild;
         }
         $elList = $this->ElementListForBuild();
@@ -339,19 +339,19 @@ class ModsCatalogManager extends CatalogModuleManager {
      * @param ModsElement $el
      * @param array $result
      */
-    public function ElementFullDependList(ModsElement $el, &$result) {
+    public function ElementFullDependList(ModsElement $el, &$result){
 
         $elList = $this->ElementListForBuild();
 
         $aDepends = explode(",", $el->ext['depends']);
-        for ($i = 0; $i < count($aDepends); $i++) {
+        for ($i = 0; $i < count($aDepends); $i++){
             $nm = trim($aDepends[$i]);
-            if (empty($nm) || (isset($result[$nm]) && $result[$nm])) {
+            if (empty($nm) || (isset($result[$nm]) && $result[$nm])){
                 continue;
             }
             $result[$nm] = true;
             $dEl = $elList->GetByName($nm);
-            if (!empty($dEl)) {
+            if (!empty($dEl)){
                 $this->ElementFullDependList($dEl, $result);
             }
         }
@@ -360,13 +360,13 @@ class ModsCatalogManager extends CatalogModuleManager {
     private $_cacheSafeRecursKey;
     private $_cacheElementBuildKey = array();
 
-    public function ElementBuildKey(ModsElement $el, $withDepends) {
+    public function ElementBuildKey(ModsElement $el, $withDepends){
 
-        if (isset($this->_cacheElementBuildKey[$el->id]) && !empty($this->_cacheElementBuildKey[$el->id])) {
+        if (isset($this->_cacheElementBuildKey[$el->id]) && !empty($this->_cacheElementBuildKey[$el->id])){
             return $this->_cacheElementBuildKey[$el->id];
         }
 
-        if (isset($this->_cacheSafeRecursKey[$el->id]) && $this->_cacheSafeRecursKey[$el->id]) {
+        if (isset($this->_cacheSafeRecursKey[$el->id]) && $this->_cacheSafeRecursKey[$el->id]){
             return "";
         }
         $this->_cacheSafeRecursKey[$el->id] = true;
@@ -376,18 +376,18 @@ class ModsCatalogManager extends CatalogModuleManager {
 
         $aTmp = explode(":", $el->ext['distrib']);
         $file = $files->Get($aTmp[0]);
-        if (empty($file)) {
+        if (empty($file)){
             return "";
         }
 
         $key = $file->id.$el->ext['version'];
 
-        if ($withDepends) {
+        if ($withDepends){
             $depends = array();
             $this->ElementFullDependList($el, $depends);
 
-            foreach ($depends as $sDName => $val) {
-                if ($sDName == $el->name) {
+            foreach ($depends as $sDName => $val){
+                if ($sDName == $el->name){
                     continue;
                 }
                 $dEl = $elList->GetByName($sDName);
@@ -408,7 +408,7 @@ class ModsCatalogManager extends CatalogModuleManager {
      * @param string $name Имя элемента
      * @return ModsBuildInfo
      */
-    public function ElementBuildDownloadFile($name, $withDepends = false) {
+    public function ElementBuildDownloadFile($name, $withDepends = false){
         // защита от бесконечной рекурсии
         $this->_cacheSafeRecursBuild = array();
         $this->_cacheSafeRecursKey = array();
@@ -419,20 +419,20 @@ class ModsCatalogManager extends CatalogModuleManager {
     private $_cacheSafeRecursBuild;
     private $_cacheElementBuild = array();
 
-    protected function ElementBuildDownloadFileMethod($name, $withDepends = false) {
+    protected function ElementBuildDownloadFileMethod($name, $withDepends = false){
 
-        if (isset($this->_cacheSafeRecursBuild[$name]) && $this->_cacheSafeRecursBuild[$name]) {
+        if (isset($this->_cacheSafeRecursBuild[$name]) && $this->_cacheSafeRecursBuild[$name]){
             return null;
         }
         $this->_cacheSafeRecursBuild[$name] = true;
 
         $elList = $this->ElementListForBuild();
-        if (empty($elList)) {
+        if (empty($elList)){
             return null;
         }
 
         $el = $elList->GetByName($name);
-        if (empty($el)) {
+        if (empty($el)){
             return null;
         }
 
@@ -442,11 +442,11 @@ class ModsCatalogManager extends CatalogModuleManager {
 
         $aTmp = explode(":", $el->ext['distrib']);
         $file = $files->Get($aTmp[0]);
-        if (empty($file)) {
+        if (empty($file)){
             return null;
         }
 
-        if (!empty($this->_cacheElementBuild[$name])) {
+        if (!empty($this->_cacheElementBuild[$name])){
             return $this->_cacheElementBuild[$name];
         }
 
@@ -463,11 +463,11 @@ class ModsCatalogManager extends CatalogModuleManager {
         $atDirs = glob($cachePath.$buildDirName."*");
         $buildDirName .= "-".$key;
 
-        if (is_array($atDirs)) {
-            for ($i = 0; $i < count($atDirs); $i++) {
+        if (is_array($atDirs)){
+            for ($i = 0; $i < count($atDirs); $i++){
                 $pi = pathinfo($atDirs[$i]);
 
-                if ($pi['basename'] == $buildDirName) {
+                if ($pi['basename'] == $buildDirName){
                     continue;
                 }
                 $this->RemoveDir($atDirs[$i]);
@@ -477,19 +477,19 @@ class ModsCatalogManager extends CatalogModuleManager {
         $cachePath .= $buildDirName."/";
 
         $build->cachePath = $cachePath;
-        if (!is_dir($cachePath) && !@mkdir($cachePath, 0777, true)) {
+        if (!is_dir($cachePath) && !@mkdir($cachePath, 0777, true)){
             return null;
         }
 
         // собранный архив для загрузки
         $outFile = $cachePath."out.zip";
-        if (file_exists($outFile)) {
+        if (file_exists($outFile)){
             $build->outFile = $outFile;
             return $build;
         }
 
         $fmMod = Abricos::GetModule('filemanager');
-        if (empty($fmMod)) {
+        if (empty($fmMod)){
             return null;
         }
 
@@ -497,9 +497,9 @@ class ModsCatalogManager extends CatalogModuleManager {
         $fmMan = FileManager::$instance;
 
         $origFile = $cachePath."origin.zip";
-        if (!file_exists($origFile)) {
+        if (!file_exists($origFile)){
             // сохранить файл из БД на диск
-            if (!$fmMan->SaveFileTo($file->id, $origFile)) {
+            if (!$fmMan->SaveFileTo($file->id, $origFile)){
                 return null;
             };
         }
@@ -507,55 +507,55 @@ class ModsCatalogManager extends CatalogModuleManager {
 
         $bldStruct = null;
         $bldStructs = ModsConfig::$instance->buildStructure;
-        if (!empty($bldStructs) && !empty($bldStructs[$elType->name])) {
+        if (!empty($bldStructs) && !empty($bldStructs[$elType->name])){
             $bldStruct = $bldStructs[$elType->name];
         }
 
         // создать папку исходников
         $srcPath = $cachePath."src/";
-        if ($withDepends && !empty($bldStruct)) {
+        if ($withDepends && !empty($bldStruct)){
             $srcPath .= $this->NormalizePath($bldStruct['builddir']."/");
         }
         $build->srcPath = $srcPath;
 
-        if (!is_dir($srcPath) && !@mkdir($srcPath, 0777, true)) {
+        if (!is_dir($srcPath) && !@mkdir($srcPath, 0777, true)){
             return $build;
         }
 
         // извлечь исходник
-        if ($this->DirIsEmpty($srcPath)) {
+        if ($this->DirIsEmpty($srcPath)){
             @($zip = new ZipArchive());
-            if (empty($zip)) {
+            if (empty($zip)){
                 return $build;
             }
 
-            if ($zip->open($origFile) === true) {
+            if ($zip->open($origFile) === true){
                 $zip->extractTo($srcPath);
                 $zip->close();
             }
         }
 
-        if (empty($bldStruct)) {
+        if (empty($bldStruct)){
             return $build;
         }
 
         $subDir = $srcPath;
-        if (!empty($bldStruct['subdir'])) {
+        if (!empty($bldStruct['subdir'])){
             $subDir .= str_replace("{v#name}", $el->name, $bldStruct['subdir'])."/";
         }
 
-        if (!is_dir($subDir) && !@mkdir($subDir, 0777, true)) {
+        if (!is_dir($subDir) && !@mkdir($subDir, 0777, true)){
             return $build;
         }
 
         // сохранить changelog, если описана структура в конфиге
-        if (!empty($bldStruct['changelog'])) {
+        if (!empty($bldStruct['changelog'])){
             $chlogFile = $subDir.$bldStruct['changelog'];
-            if (!file_exists($chlogFile) && ($handle = fopen($chlogFile, 'wb'))) {
+            if (!file_exists($chlogFile) && ($handle = fopen($chlogFile, 'wb'))){
 
                 $chLogList = $this->ElementChangeLogListByName($el->name, "version");
                 $lstChLog = "";
-                for ($i = 0; $i < $chLogList->Count(); $i++) {
+                for ($i = 0; $i < $chLogList->Count(); $i++){
                     $chLog = $chLogList->GetByIndex($i);
                     $dl = $chLog->dateline;
                     $log = $chLog->log;
@@ -567,9 +567,9 @@ class ModsCatalogManager extends CatalogModuleManager {
                     $log = str_replace("\r\n", '[[rn]]', $log);
                     $log = str_replace("\n", '[[rn]]', $log);
                     $alog = explode("[[rn]]", $log);
-                    foreach ($alog as $s) {
+                    foreach ($alog as $s){
                         $s = trim($s);
-                        if (empty($s)) {
+                        if (empty($s)){
                             continue;
                         }
 
@@ -585,20 +585,20 @@ class ModsCatalogManager extends CatalogModuleManager {
         }
 
         // включить зависимые модули в сборку
-        if ($bldStruct['depends'] || $withDepends) {
+        if ($bldStruct['depends'] || $withDepends){
             $depends = array();
             $this->ElementFullDependList($el, $depends);
-            foreach ($depends as $sDName => $val) {
-                if ($sDName == $el->name) {
+            foreach ($depends as $sDName => $val){
+                if ($sDName == $el->name){
                     continue;
                 }
                 $dEl = $elList->GetByName($sDName);
-                if (empty($dEl)) {
+                if (empty($dEl)){
                     continue;
                 }
 
                 $dBuild = $this->ElementBuildDownloadFileMethod($dEl->name, true);
-                if (empty($dBuild) || empty($dBuild->outFile)) {
+                if (empty($dBuild) || empty($dBuild->outFile)){
                     continue;
                 }
 
@@ -608,11 +608,11 @@ class ModsCatalogManager extends CatalogModuleManager {
 
         $zip = new ZipArchive();
 
-        if ($zip->open($outFile, ZipArchive::CREATE)) {
+        if ($zip->open($outFile, ZipArchive::CREATE)){
             $srcPath = $this->NormalizePath($build->cachePath."src/");
             $files = array();
             $this->ReadDir($srcPath, $files);
-            foreach ($files as $file) {
+            foreach ($files as $file){
                 $fileInZip = str_replace($srcPath, "", $file);
                 $zip->addFile($file, $fileInZip);
             }
@@ -625,19 +625,19 @@ class ModsCatalogManager extends CatalogModuleManager {
         return $build;
     }
 
-    public function ReadDir($sDir, &$result) {
+    public function ReadDir($sDir, &$result){
         $sDir = $this->NormalizePath($sDir."/");
-        if (!is_dir($sDir)) {
+        if (!is_dir($sDir)){
             return;
         }
 
         $dir = dir($sDir);
-        while (false !== ($entry = $dir->read())) { // удаление файлов
-            if ($entry == "." || $entry == ".." || empty($entry)) {
+        while (false !== ($entry = $dir->read())){ // удаление файлов
+            if ($entry == "." || $entry == ".." || empty($entry)){
                 continue;
             }
             $file = $this->NormalizePath($sDir."/".$entry);
-            if (is_dir($file)) {
+            if (is_dir($file)){
                 $this->ReadDir($file, $result);
             } else {
                 array_push($result, $file);
@@ -651,35 +651,35 @@ class ModsCatalogManager extends CatalogModuleManager {
      *
      * @param string $dir
      */
-    public function DirCheckInCache($dir) {
+    public function DirCheckInCache($dir){
         $dir = $this->NormalizePath($dir."/");
         $cachePath = $this->NormalizePath(CWD."/cache/mods/");
-        if (strpos($dir, $cachePath) === false) {
+        if (strpos($dir, $cachePath) === false){
             return false;
         }
         return true;
     }
 
-    private function RemoveDirMethod($rmdir) {
+    private function RemoveDirMethod($rmdir){
         $dir = $this->NormalizePath($rmdir."/");
         $dir = dir($rmdir);
 
-        while (false !== ($entry = $dir->read())) { // удаление файлов
-            if ($entry == "." || $entry == ".." || empty($entry)) {
+        while (false !== ($entry = $dir->read())){ // удаление файлов
+            if ($entry == "." || $entry == ".." || empty($entry)){
                 continue;
             }
             $obj = $rmdir."/".$entry;
-            if (is_dir($obj)) {
+            if (is_dir($obj)){
                 continue;
             }
             @unlink($obj);
         }
-        while (false !== ($entry = $dir->read())) { // удаление папок
-            if ($entry == "." || $entry == ".." || empty($entry)) {
+        while (false !== ($entry = $dir->read())){ // удаление папок
+            if ($entry == "." || $entry == ".." || empty($entry)){
                 continue;
             }
             $obj = $rmdir."/".$entry;
-            if (!is_dir($obj)) {
+            if (!is_dir($obj)){
                 continue;
             }
             $this->RemoveDirMethod($obj);
@@ -688,26 +688,26 @@ class ModsCatalogManager extends CatalogModuleManager {
         @rmdir($rmdir);
     }
 
-    public function RemoveDir($dir) {
-        if (!$this->DirCheckInCache($dir)) {
+    public function RemoveDir($dir){
+        if (!$this->DirCheckInCache($dir)){
             return false;
         }
         $this->RemoveDirMethod($dir);
     }
 
-    public function NormalizePath($path) {
+    public function NormalizePath($path){
         $path = str_replace("\\", "/", $path);
         $path = preg_replace('/\/+/', '/', $path);
         return $path;
     }
 
-    public function DirIsEmpty($sDir) {
+    public function DirIsEmpty($sDir){
         $sDir = $this->NormalizePath($sDir."/");
 
         $dir = dir($sDir);
 
-        while (false !== ($entry = $dir->read())) {
-            if ($entry == "." || $entry == ".." || empty($entry)) {
+        while (false !== ($entry = $dir->read())){
+            if ($entry == "." || $entry == ".." || empty($entry)){
                 continue;
             }
             return false;
@@ -715,42 +715,42 @@ class ModsCatalogManager extends CatalogModuleManager {
         return true;
     }
 
-    public function DirCopy($srcdir, $dstdir) {
+    public function DirCopy($srcdir, $dstdir){
         $srcdir = $this->NormalizePath($srcdir);
         $dstdir = $this->NormalizePath($dstdir);
 
-        if (is_dir($srcdir)) {
+        if (is_dir($srcdir)){
             @mkdir($dstdir, 0777, true);
 
             $dir = dir($srcdir);
 
-            while (false !== ($entry = $dir->read())) {
-                if ($entry == "." || $entry == ".." || empty($entry)) {
+            while (false !== ($entry = $dir->read())){
+                if ($entry == "." || $entry == ".." || empty($entry)){
                     continue;
                 }
                 $srcSub = $srcdir."/".$entry;
                 $dstSub = $dstdir."/".$entry;
 
-                if (is_dir($srcSub)) {
+                if (is_dir($srcSub)){
                     $this->DirCopy($srcSub, $dstSub);
                 } else {
-                    if (file_exists($dstSub)) {
+                    if (file_exists($dstSub)){
                         continue;
                     }
                     @copy($srcSub, $dstSub);
                 }
             }
         } else {
-            if (file_exists($dstdir)) {
+            if (file_exists($dstdir)){
                 return;
             }
             @copy($srcdir, $dstdir);
         }
     }
 
-    public function OnElementAppendByOperator($elementid) {
+    public function OnElementAppendByOperator($elementid){
         $el = $this->Element($elementid);
-        if (empty($el)) {
+        if (empty($el)){
             return;
         }
 
@@ -762,7 +762,7 @@ class ModsCatalogManager extends CatalogModuleManager {
         $elLink = "http://".$host.$el->URI();
         $email = SystemModule::$instance->GetPhrases()->Get('admin_mail');
 
-        if (empty($email)) {
+        if (empty($email)){
             return;
         }
 
@@ -781,9 +781,9 @@ class ModsCatalogManager extends CatalogModuleManager {
         Abricos::Notify()->SendMail($email, $subject, $body);
     }
 
-    public function OnElementModer($elementid) {
+    public function OnElementModer($elementid){
         $el = $this->Element($elementid, true);
-        if (empty($el)) {
+        if (empty($el)){
             return;
         }
 
@@ -795,12 +795,12 @@ class ModsCatalogManager extends CatalogModuleManager {
         $elLink = "http://".$host.$el->URI();
 
         $user = $this->UserByElement($el);
-        if (empty($user)) {
+        if (empty($user)){
             return;
         }
 
         $email = $user->email;
-        if (empty($email)) {
+        if (empty($email)){
             return;
         }
 

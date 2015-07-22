@@ -27,16 +27,16 @@ $elType = $elTypeList->Get($el->elTypeId);
 $cfg = ModsConfig::$instance;
 $cfgBS = $cfg->buildStructure[$elType->name];
 
-if (!empty($el) && $cfg->buildStructure && !empty($cfgBS)) {
+if (!empty($el) && $cfg->buildStructure && !empty($cfgBS)){
 
-    if ($withDepends && !$cfgBS['optiondepends']) {
+    if ($withDepends && !$cfgBS['optiondepends']){
         $withDepends = false;
     }
 
     $build = $cMan->ElementBuildDownloadFile($modName, $withDepends);
 }
 
-if (empty($build)) {
+if (empty($build)){
     $brick->content = Brick::ReplaceVarByData($brick->content, array(
         "file" => $adr->dir[3]
     ));
