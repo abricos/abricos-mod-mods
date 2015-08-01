@@ -2,7 +2,7 @@ var Component = new Brick.Component();
 Component.requires = {
     yahoo: ['tabview'],
     mod: [
-        {name: 'catalog', files: ['typemanager.js']},
+        {name: 'catalog', files: ['typeManager.js']},
         {name: '{C#MODNAME}', files: ['lib.js']}
     ]
 };
@@ -43,7 +43,10 @@ Component.entryPoint = function(NS){
             this.elShow('view');
 
             new YAHOO.widget.TabView(this.gel('view'));
-            this.viewWidget = new NSCat.TypeManagerWidget(this.gel('typemanager'), man);
+            this.viewWidget = new NSCat.TypeManagerWidget({
+                boundingBox: this.gel('typemanager'),
+                appNamespace: NS
+            });
         }
     });
     NS.CatalogConfigWidget = CatalogConfigWidget;

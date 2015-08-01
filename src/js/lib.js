@@ -6,6 +6,28 @@ Component.requires = {
 };
 Component.entryPoint = function(NS){
 
+    var Y = Brick.YUI,
+        L = Y.Lang,
+        COMPONENT = this,
+        SYS = Brick.mod.sys,
+        NSCat = Brick.mod.catalog;
+
+    SYS.Application.build(COMPONENT,
+        NSCat.Application.ajaxes,
+        NSCat.Application.px,
+        [],
+        NSCat.Application.sx
+    );
+
+    /*
+    NS.App.ATTRS = Y.merge(NS.App.ATTRS, {
+        ElementTypeClass: {
+            value: null
+        }
+
+    });
+    /**/
+
     NS.roles = new Brick.AppRoles('{C#MODNAME}', {
         isAdmin: 50,
         isModerator: 45,
@@ -19,7 +41,6 @@ Component.entryPoint = function(NS){
 
     var SysNS = Brick.mod.sys;
     var LNG = this.language;
-    var NSCat = Brick.mod.catalog;
 
     var buildTemplate = this.buildTemplate;
     buildTemplate({}, '');
