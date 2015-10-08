@@ -1,17 +1,40 @@
 var Component = new Brick.Component();
 Component.requires = {
-    yahoo: ['resize'],
     mod: [
-        {name: 'catalog', files: ['catalogmanager.js']},
+        {name: 'catalog', files: ['catalogManager.js']},
         {name: '{C#MODNAME}', files: ['lib.js']}
     ]
 };
 Component.entryPoint = function(NS){
 
-    var Dom = YAHOO.util.Dom,
-        L = YAHOO.lang,
-        LNG = this.language,
-        buildTemplate = this.buildTemplate;
+    var Y = Brick.YUI,
+        COMPONENT = this,
+        SYS = Brick.mod.sys;
+
+    var NSCat = Brick.mod.catalog;
+
+    NS.CatalogManagerWidget = Y.Base.create('catalogManagerWidget', SYS.AppWidget, [], {
+        onInitAppWidget: function(err, appInstance){
+            var tp = this.template;
+
+            this.viewWidget = new NSCat.CatalogManagerWidget({
+                srcNode: tp.gel('catalogManager'),
+                appInstance: appInstance
+            });
+        },
+        destructor: function(){
+            if (!this.viewWidget){
+                this.viewWidget.destroy();
+            }
+        },
+    }, {
+        ATTRS: {
+            component: {value: COMPONENT},
+            templateBlockName: {value: 'widget'},
+        }
+    });
+
+    return; ////////////////////////////////////// TODO: old functions
 
     var NSCat = Brick.mod.catalog;
 

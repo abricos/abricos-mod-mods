@@ -7,26 +7,8 @@ Component.requires = {
 Component.entryPoint = function(NS){
 
     var Y = Brick.YUI,
-        L = Y.Lang,
         COMPONENT = this,
-        SYS = Brick.mod.sys,
-        NSCat = Brick.mod.catalog;
-
-    SYS.Application.build(COMPONENT,
-        NSCat.Application.ajaxes,
-        NSCat.Application.px,
-        [],
-        NSCat.Application.sx
-    );
-
-    /*
-     NS.App.ATTRS = Y.merge(NS.App.ATTRS, {
-     ElementTypeClass: {
-     value: null
-     }
-
-     });
-     /**/
+        SYS = Brick.mod.sys;
 
     NS.roles = new Brick.AppRoles('{C#MODNAME}', {
         isAdmin: 50,
@@ -36,25 +18,34 @@ Component.entryPoint = function(NS){
         isView: 10
     });
 
-    var L = YAHOO.lang,
-        R = NS.roles;
-
-    var SysNS = Brick.mod.sys;
-    var LNG = this.language;
-
-    var buildTemplate = this.buildTemplate;
-    buildTemplate({}, '');
-
-    NS.lif = function(f){
-        return L.isFunction(f) ? f : function(){
-        };
+    NS.Application = {
+        ATTRS: {},
+        REQS: {},
+        URLS: {
+            ws: "#app={C#MODNAMEURI}/wspace/ws/",
+            catalog: {
+                manager: function(){
+                    return this.getURL('ws') + 'catalog/CatalogManagerWidget/';
+                },
+                config: function(){
+                    return this.getURL('ws') + 'catalogConfig/CatalogConfigWidget/';
+                }
+            }
+        }
     };
-    NS.life = function(f, p1, p2, p3, p4, p5, p6, p7){
-        f = NS.lif(f);
-        f(p1, p2, p3, p4, p5, p6, p7);
-    };
-    NS.Item = SysNS.Item;
-    NS.ItemList = SysNS.ItemList;
+
+    Y.mix(NS.Application, Brick.mod.catalog.Application, false, null, 0, true);
+
+    SYS.Application.build(COMPONENT, {}, {
+        initializer: function(){
+            NS.roles.load(function(){
+                this.initCallbackFire();
+            }, this);
+        }
+    }, [], NS.Application);
+
+    return; /////////////// TODO: old functions
+
 
     var Element = function(manager, d){
         Element.superclass.constructor.call(this, manager, d);
@@ -68,29 +59,6 @@ Component.entryPoint = function(NS){
         }
     });
     NS.Element = Element;
-
-
-    var WS = "#app={C#MODNAMEURI}/wspace/ws/";
-    NS.navigator = {
-        'home': function(){
-            return WS;
-        },
-        'catalogman': function(catid){
-            var link = WS + 'catalog/CatalogManagerWidget/';
-            if (catid && catid * 1 > 0){
-                link += catid + '/';
-            }
-            return link;
-        },
-        'catalogconfig': function(){
-            return WS + 'catalogconfig/CatalogConfigWidget/';
-        },
-        'go': function(url){
-            Brick.Page.reload(url);
-        }
-    };
-
-    NS.manager = null;
 
     NS.initManager = function(callback){
         R.load(function(){

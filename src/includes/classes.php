@@ -9,62 +9,6 @@
 
 require_once 'dbquery.php';
 
-class ModsConfig {
-
-    /**
-     * @var ModsConfig
-     */
-    public static $instance;
-
-    /**
-     * Осуществлять сборку при скачивании
-     *
-     * @var boolean
-     */
-    public $buildDownload = false;
-
-
-    /**
-     * Структура/правила сборки файла для скачивания.
-     *
-     * Пример структуры платформы Абрикос:
-     * $buildStructure = array(
-     *    "module" => array(
-     *        "optiondepends" => true, // опциональная загрузка включая зависимости
-     *        "subdir" => "{v#name}",
-     *        "builddir" => "modules", // собирать в папку modules
-     *        "changelog" => "CHANGELOG.txt" // генерировать changelog.txt, если его нет в исходном архиве
-     *    ),
-     *    "core" => array(
-     *        "changelog" => "CHANGELOG.txt"
-     *    ),
-     *    "distrib" => array(
-     *        "depends" => true, // при загрузке включить зависимые модули
-     *        "changelog" => "CHANGELOG.txt"
-     *    )
-     * );
-     *
-     * @var array|null
-     */
-    public $buildStructure = null;
-
-    public function __construct($cfg){
-        ModsConfig::$instance = $this;
-
-        if (empty($cfg)){
-            $cfg = array();
-        }
-
-        if (isset($cfg['buildDownload'])){
-            $this->buildDownload = $cfg['buildDownload'];
-        }
-
-        if (isset($cfg['buildStructure'])){
-            $this->buildStructure = $cfg['buildStructure'];
-        }
-    }
-}
-
 class ModsElement extends CatalogElement {
 
     public function URI(){
@@ -172,52 +116,6 @@ class ModsBuildInfo {
 
 class ModsCatalogManager extends CatalogModuleManager {
 
-    /**
-     * @var ModsCatalogManager
-     */
-    public static $instance = null;
-
-    /**
-     * @var ModsManager
-     */
-    public $manager;
-
-    public function __construct(){
-        $this->manager = ModsManager::$instance;
-
-        ModsCatalogManager::$instance = $this;
-
-        parent::__construct("mods");
-
-        $this->CatalogElementClass = 'ModsElement';
-        $this->CatalogElementListClass = 'ModsElementList';
-
-        // разрешить изменять имя элемента
-        $this->cfgElementNameChange = true;
-        $this->cfgElementNameUnique = true;
-        $this->cfgElementCreateBaseTypeDisable = true;
-        $this->cfgVersionControl = true;
-    }
-
-    public function IsAdminRole(){
-        return $this->manager->IsAdminRole();
-    }
-
-    public function IsModeratorRole(){
-        return $this->manager->IsModeratorRole();
-    }
-
-    public function IsOperatorRole(){
-        return $this->manager->IsOperatorRole();
-    }
-
-    public function IsWriteRole(){
-        return $this->manager->IsWriteRole();
-    }
-
-    public function IsViewRole(){
-        return $this->manager->IsViewRole();
-    }
 
     /**
      * @param integer $modName

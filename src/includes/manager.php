@@ -7,10 +7,10 @@
  * @author Alexander Kuzmin <roosit@abricos.org>
  */
 
-Abricos::GetModule('catalog')->GetManager();
-
-require_once 'classes.php';
-
+/**
+ * Class ModsManager
+ * @property ModsModule $module
+ */
 class ModsManager extends Ab_ModuleManager {
 
     /**
@@ -23,17 +23,10 @@ class ModsManager extends Ab_ModuleManager {
      */
     public $config;
 
-    /**
-     * @var ModsCatalogManager
-     */
-    public $cManager;
-
     public function __construct(ModsModule $module){
         parent::__construct($module);
 
         ModsManager::$instance = $this;
-
-        $this->cManager = new ModsCatalogManager();
 
         $this->config = new ModsConfig(isset(Abricos::$config['module']['mods']) ? Abricos::$config['module']['mods'] : array());
     }
@@ -70,13 +63,24 @@ class ModsManager extends Ab_ModuleManager {
         return $this->IsRoleEnable(ModsAction::VIEW);
     }
 
-    public function AJAX($d){
-        $ret = $this->cManager->AJAX($d);
-        if (!empty($ret)){
-            return $ret;
-        }
+    private $_app;
 
-        return null;
+    public function GetApp(){
+        if (empty($this->_app)){
+            /** @var CatalogManager $catalogManager */
+            $catalogManager = Abricos::GetModule('catalog')->GetManager();
+            $catalogManager->AppClassesRequire();
+
+            require_once 'models.php';
+            require_once 'dbquery.php';
+            require_once 'app.php';
+            $this->_app = new ModsApp($this);
+        }
+        return $this->_app;
+    }
+
+    public function AJAX($d){
+        return $this->GetApp()->AJAX($d);
     }
 
     /**
@@ -176,5 +180,62 @@ class ModsManager extends Ab_ModuleManager {
         );
     }
 }
+
+class ModsConfig {
+
+    /**
+     * @var ModsConfig
+     */
+    public static $instance;
+
+    /**
+     * Осуществлять сборку при скачивании
+     *
+     * @var boolean
+     */
+    public $buildDownload = false;
+
+
+    /**
+     * Структура/правила сборки файла для скачивания.
+     *
+     * Пример структуры платформы Абрикос:
+     * $buildStructure = array(
+     *    "module" => array(
+     *        "optiondepends" => true, // опциональная загрузка включая зависимости
+     *        "subdir" => "{v#name}",
+     *        "builddir" => "modules", // собирать в папку modules
+     *        "changelog" => "CHANGELOG.txt" // генерировать changelog.txt, если его нет в исходном архиве
+     *    ),
+     *    "core" => array(
+     *        "changelog" => "CHANGELOG.txt"
+     *    ),
+     *    "distrib" => array(
+     *        "depends" => true, // при загрузке включить зависимые модули
+     *        "changelog" => "CHANGELOG.txt"
+     *    )
+     * );
+     *
+     * @var array|null
+     */
+    public $buildStructure = null;
+
+    public function __construct($cfg){
+        ModsConfig::$instance = $this;
+
+        if (empty($cfg)){
+            $cfg = array();
+        }
+
+        if (isset($cfg['buildDownload'])){
+            $this->buildDownload = $cfg['buildDownload'];
+        }
+
+        if (isset($cfg['buildStructure'])){
+            $this->buildStructure = $cfg['buildStructure'];
+        }
+    }
+}
+
 
 ?>
