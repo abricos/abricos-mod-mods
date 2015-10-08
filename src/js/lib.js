@@ -20,13 +20,13 @@ Component.entryPoint = function(NS){
     );
 
     /*
-    NS.App.ATTRS = Y.merge(NS.App.ATTRS, {
-        ElementTypeClass: {
-            value: null
-        }
+     NS.App.ATTRS = Y.merge(NS.App.ATTRS, {
+     ElementTypeClass: {
+     value: null
+     }
 
-    });
-    /**/
+     });
+     /**/
 
     NS.roles = new Brick.AppRoles('{C#MODNAME}', {
         isAdmin: 50,
