@@ -89,6 +89,7 @@ class ModsManager extends Ab_ModuleManager {
      * @param SMMenuItem $menuItem
      */
     public function Sitemap_MenuBuild(SMMenuItem $mItem){
+        return;
         require_once 'smclasses.php';
 
         $cMan = $this->cManager;
