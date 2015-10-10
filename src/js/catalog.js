@@ -9,9 +9,8 @@ Component.entryPoint = function(NS){
 
     var Y = Brick.YUI,
         COMPONENT = this,
-        SYS = Brick.mod.sys;
-
-    var NSCat = Brick.mod.catalog;
+        SYS = Brick.mod.sys,
+        NSCat = Brick.mod.catalog;
 
     NS.CatalogManagerWidget = Y.Base.create('catalogManagerWidget', SYS.AppWidget, [], {
         onInitAppWidget: function(err, appInstance){
@@ -34,7 +33,7 @@ Component.entryPoint = function(NS){
         }
     });
 
-    return; ////////////////////////////////////// TODO: old functions
+    return; ////////////////////////////////////// TODO: remove old functions
 
     var NSCat = Brick.mod.catalog;
 
