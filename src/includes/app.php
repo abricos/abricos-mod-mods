@@ -15,13 +15,14 @@
 class ModsApp extends CatalogApp {
 
     public function __construct(ModsManager $manager){
-        $appConfig = new CatalogAppConfig('mods');
-        $appConfig->elementNameChange = true;
-        $appConfig->elementNameUnique = true;
-        $appConfig->elementCreateBaseTypeDisable = true;
-        $appConfig->versionControl = true;
+        parent::__construct($manager);
 
-        parent::__construct($manager, $appConfig);
+        $config = $this->Config();
+        $config->dbPrefix = 'mods';
+        $config->elementNameChange = true;
+        $config->elementNameUnique = true;
+        $config->elementCreateBaseTypeDisable = true;
+        $config->versionControl = true;
     }
 
     public function IsAdminRole(){
@@ -43,8 +44,6 @@ class ModsApp extends CatalogApp {
     public function IsViewRole(){
         return $this->manager->IsViewRole();
     }
-
-
 }
 
 ?>
