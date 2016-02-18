@@ -11,8 +11,6 @@ $brick = Brick::$builder->brick;
 $p = &$brick->param->param;
 $v = &$brick->param->var;
 
-$cMan = ModsModule::$instance->GetManager()->cManager;
-
 $imgWidth = bkint($p['imgw']);
 $imgHeight = bkint($p['imgh']);
 
@@ -23,7 +21,17 @@ Abricos::GetModule('filemanager')->EnableThumbSize(array(
     )
 ));
 
-$elTypeList = $cMan->ElementTypeList();
+/** @var ModsApp $app */
+$app = Abricos::GetModule('mods')->GetManager()->GetApp();
+
+$elementList = $app->ElementList(array(
+    'id' => 'default',
+    'limit' => 10
+));
+print_r($elementList->Count());
+exit;
+
+$elTypeList = $app->ElementTypeList();
 
 if (is_object($p['cfg'])){ // сборку вызывает другий кирпич
     $cfg = $p['cfg'];

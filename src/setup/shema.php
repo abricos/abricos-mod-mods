@@ -12,13 +12,18 @@ $updateManager = Ab_UpdateManager::$current;
 $db = Abricos::$db;
 $pfx = $db->prefix;
 
-Abricos::GetModule('mods')->GetManager();
-ModsManager::$instance->RolesDisable();
+/** @var ModsModule $module */
+$module = Abricos::GetModule('mods');
 
-$cManager = ModsManager::$instance->cManager;
+/** @var ModsManager $manager */
+$manager = $module->GetManager();
+
+$manager->RolesDisable();
+
+$app = $manager->GetApp();
 
 if ($updateManager->isInstall()){
-    Abricos::GetModule('mods')->permission->Install();
+    $module->permission->permission->Install();
 
     $ord = 100;
     $cManager->ElementOptionSave(0, array(
@@ -96,18 +101,18 @@ if ($updateManager->isUpdate('0.1.3')){
 
     $db->query_write("
 		CREATE TABLE IF NOT EXISTS ".$pfx."mods_download (
-			`elementname` varchar(25) NOT NULL DEFAULT '' COMMENT 'Имя элемента каталога',
-			`counter` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Счетчик',
+			elementname varchar(25) NOT NULL DEFAULT '' COMMENT 'Имя элемента каталога',
+			counter int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Счетчик',
 
-			`version` varchar(25) NOT NULL DEFAULT '' COMMENT 'Текущая версия',
-			`origfile` varchar(8) NOT NULL DEFAULT '' COMMENT 'Идентификатор исходного файла',
+			version varchar(25) NOT NULL DEFAULT '' COMMENT 'Текущая версия',
+			origfile varchar(8) NOT NULL DEFAULT '' COMMENT 'Идентификатор исходного файла',
 			
-			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
-			`upddate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата обновления',
+			dateline int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
+			upddate int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата обновления',
 	
-			UNIQUE KEY (`elementname`)
-		)".$charset);
-
+			UNIQUE KEY (elementname)
+		)".$charset
+    );
 
 }
 ?>

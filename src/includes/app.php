@@ -14,10 +14,7 @@
  */
 class ModsApp extends CatalogApp {
 
-    public function __construct(ModsManager $manager){
-        parent::__construct($manager);
-
-        $config = $this->Config();
+    protected function Configure($config){
         $config->dbPrefix = 'mods';
         $config->elementNameChange = true;
         $config->elementNameUnique = true;
@@ -43,6 +40,15 @@ class ModsApp extends CatalogApp {
 
     public function IsViewRole(){
         return $this->manager->IsViewRole();
+    }
+
+    public function ModuleList($configData = null){
+        $config = $this->GetElementListConfig($configData);
+        if (empty($config)){
+            return 500;
+        }
+        print_r($config);
+        exit;
     }
 }
 

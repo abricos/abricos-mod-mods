@@ -7,6 +7,11 @@
  * @author Alexander Kuzmin <roosit@abricos.org>
  */
 
+$modCatalog = Abricos::GetModule('catalog');
+if (empty($modCatalog)){
+    return;
+}
+
 /**
  * Каталог модулей
  */
@@ -150,14 +155,8 @@ class ModsPermission extends Ab_UserPermission {
     }
 }
 
-$modCatalog = Abricos::GetModule('catalog');
-if (empty($modCatalog)){
-    return;
-}
-
 $modMods = new ModsModule();
 
-CatalogModule::$instance->Register($modMods);
 Abricos::ModuleRegister($modMods);
 
 ?>

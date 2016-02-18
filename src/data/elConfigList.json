@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "id": "default",
+      "filterFields": "catalogid"
+    },
+    {
+      "id": "full",
+      "filterFields": "",
+      "extOptions": "mindesc,version,compat,distrib,depends"
+    }
+  ]
+}
