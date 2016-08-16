@@ -820,6 +820,3 @@ class ModsCatalogManager extends CatalogModuleManager {
     }
 
 }
-
-
-?>

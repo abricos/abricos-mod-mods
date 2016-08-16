@@ -95,5 +95,3 @@ if (!empty($el->detail->metaKeys) && $el->detail->metaKeys != "&nbsp;"){
 if (!empty($el->detail->metaDesc) && $el->detail->metaDesc != "&nbsp;"){
     Brick::$builder->SetGlobalVar('meta_desc', $el->detail->metaDesc);
 }
-
-?>

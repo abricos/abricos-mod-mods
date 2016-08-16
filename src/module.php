@@ -24,7 +24,7 @@ class ModsModule extends Ab_Module {
 
     private $_manager = null;
 
-    public function ModsModule(){
+    public function __construct(){
         ModsModule::$instance = $this;
 
         $this->version = "0.1.4";
@@ -129,7 +129,7 @@ class ModsAction {
 
 class ModsPermission extends Ab_UserPermission {
 
-    public function ModsPermission(ModsModule $module){
+    public function __construct(ModsModule $module){
         $defRoles = array(
             new Ab_UserRole(ModsAction::VIEW, Ab_UserGroup::GUEST),
             new Ab_UserRole(ModsAction::VIEW, Ab_UserGroup::REGISTERED),
@@ -164,5 +164,3 @@ $modMods = new ModsModule();
 
 CatalogModule::$instance->Register($modMods);
 Abricos::ModuleRegister($modMods);
-
-?>

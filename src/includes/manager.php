@@ -192,5 +192,3 @@ class ModsManager extends Ab_ModuleManager {
     }
 
 }
-
-?>

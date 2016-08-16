@@ -54,5 +54,3 @@ class ModsElementMenuItem extends SMMenuItem {
         $this->element = $el;
     }
 }
-
-?>

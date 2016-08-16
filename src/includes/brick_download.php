@@ -55,5 +55,3 @@ header("Content-Length: ".filesize($outFile));
 echo file_get_contents($outFile);
 
 exit;
-
-?>
