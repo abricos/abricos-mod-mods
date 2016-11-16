@@ -63,7 +63,7 @@ if (empty($elList)){
     return;
 }
 
-$uList = $cMan->UserList($elList);
+$userList = $cMan->UserList($elList);
 $files = $cMan->ElementOptionFileList($elList);
 
 $downList = $cMan->ElementDownloadInfoList();
@@ -89,7 +89,6 @@ for ($i = 0; $i < $elList->Count(); $i++){
 
     $dl = $el->dateline;
     $upd = $el->upddate;
-    $user = $uList->Get($el->userid);
 
     $aTmp = explode(":", $el->ext['distrib']);
     $file = $files->Get($aTmp[0]);
@@ -110,13 +109,15 @@ for ($i = 0; $i < $elList->Count(); $i++){
 
     $elType = $elTypeList->Get($el->elTypeId);
 
+    $user = $userList->Get($el->userid);
+
     $replace = array(
         "image" => $image,
         "eltypetitle" => $elType->title,
         "title" => addslashes(htmlspecialchars($el->title)),
         "version" => $el->ext['version'],
         "ulink" => $user->URL(),
-        "uname" => $user->GetUserName(),
+        "uname" => $user->GetViewName(),
         "distdowncnt" => $downloadCount,
         "downlink" => !empty($file) ? $el->DownloadURI($file) : "#",
         "compat" => $el->ext['compat'],

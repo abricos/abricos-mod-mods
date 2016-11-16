@@ -152,7 +152,7 @@ $brick->content = Brick::ReplaceVarByData($brick->content, array(
     "title" => addslashes(htmlspecialchars($el->title)),
     "version" => $el->ext['version'],
     "ulink" => $user->URL(),
-    "uname" => $user->GetUserName(),
+    "uname" => $user->GetViewName(),
     "changelog" => $lstChLog,
     "disscreens" => $disScreens,
     "screencnt" => $fotoList->Count() <= 1 ? "" : "(".($fotoList->Count() - 1).")",

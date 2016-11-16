@@ -96,14 +96,12 @@ class ModsElement extends CatalogElement {
     }
 }
 
+/**
+ * Class ModsElementList
+ *
+ * @method ModsElement GetByIndex($i)
+ */
 class ModsElementList extends CatalogElementList {
-
-    /**
-     * @return ModsElement
-     */
-    public function GetByIndex($i){
-        return parent::GetByIndex($i);
-    }
 
     public function GetByName($elName){
         $cnt = $this->Count();
